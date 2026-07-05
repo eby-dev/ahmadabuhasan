@@ -1,15 +1,12 @@
-# Legacy filename entry points from the old PHP portfolio
+# Legacy filename entry points from the old PHP portfolio.
+# Note: Cloudflare Pages treats `#` in `_redirects` as a comment character,
+# so hash-anchor rules like `/#about /about 301` are (a) never triggered by
+# real HTTP requests (browsers strip the hash before sending) and (b) parsed
+# incorrectly by Cloudflare into a broken `/` -> `/about` redirect. Do not
+# add hash-anchor rules to this file.
 /index               /                301
 /index.html          /                301
 /index.php           /                301
 
-# Old single-page anchor paths → new dedicated routes
-/#about              /about           301
-/#resume             /experience      301
-/#portfolio          /projects        301
-/#contact            /contact         301
-/#skills             /skills          301
-/#home               /                301
-
-# www → apex fallback (the dashboard Rules entry is the primary; this is a safety net)
+# www -> apex fallback (the dashboard Rules entry is the primary; this is a safety net)
 https://www.ahmadabuhasan.com/*  https://ahmadabuhasan.com/:splat  301!
