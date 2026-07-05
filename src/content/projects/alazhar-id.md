@@ -11,7 +11,8 @@ tech:
   - GetX
   - Dio
   - BNI Payment Gateway
-links: {}
+links:
+  playStore: https://play.google.com/store/apps/details?id=com.natusi.alazhar_id
 status: shipped
 featured: true
 publishedAt: 2024-01-01

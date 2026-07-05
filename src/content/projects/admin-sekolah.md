@@ -10,7 +10,8 @@ tech:
   - Kotlin
   - MVVM
   - Google Maps
-links: {}
+links:
+  playStore: https://play.google.com/store/apps/details?id=com.ekosp.indoweb.adminsekolah
 status: shipped
 downloads: 1000
 featured: false

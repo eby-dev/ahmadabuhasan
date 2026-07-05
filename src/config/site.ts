@@ -48,9 +48,19 @@ export const SITE = {
       url: 'https://github.com/eby-dev',
     },
     {
+      id: 'gitlab',
+      label: 'GitLab',
+      url: 'https://gitlab.com/ahmadabuhasan',
+    },
+    {
       id: 'playstore',
       label: 'Google Play',
       url: 'https://play.google.com/store/apps/dev?id=6964311956052920659',
+    },
+    {
+      id: 'connect',
+      label: 'Connect with Eby',
+      url: 'https://connect-with-eby.web.app',
     },
   ],
 
@@ -61,8 +71,10 @@ export const SITE = {
     sameAs: [
       'https://www.linkedin.com/in/ahmadabuhasan',
       'https://github.com/eby-dev',
+      'https://gitlab.com/ahmadabuhasan',
       'https://play.google.com/store/apps/dev?id=6964311956052920659',
       'https://g.dev/ahmadabuhasan',
+      'https://connect-with-eby.web.app',
     ],
     worksFor: {
       name: 'Brighton Real Estate',

@@ -14,7 +14,8 @@ tech:
   - Google Maps
   - OneSignal
   - Flame
-links: {}
+links:
+  playStore: https://play.google.com/store/apps/details?id=com.cipta.nirmala
 status: shipped
 featured: true
 publishedAt: 2024-06-01

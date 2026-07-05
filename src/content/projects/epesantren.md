@@ -12,7 +12,8 @@ tech:
   - GPS
   - TrueTime
   - WhatsApp
-links: {}
+links:
+  playStore: https://play.google.com/store/apps/details?id=com.pesantren.pesantren_flutter
 status: shipped
 downloads: 1000
 featured: false

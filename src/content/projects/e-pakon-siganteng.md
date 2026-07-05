@@ -13,7 +13,8 @@ tech:
   - ML Kit
   - Biometric
   - Room
-links: {}
+links:
+  playStore: https://play.google.com/store/apps/details?id=com.natusi.bkpsdm
 status: shipped
 featured: true
 publishedAt: 2024-03-01

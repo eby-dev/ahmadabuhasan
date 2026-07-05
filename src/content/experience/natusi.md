@@ -1,6 +1,6 @@
 ---
 company: CV. Natusi
-role: Mobile Developer
+role: Programmer Mobile
 location: Mojokerto, East Java
 type: Full-time
 startDate: 2023-07-01
