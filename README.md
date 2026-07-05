@@ -18,7 +18,7 @@ Zero client-side JavaScript on the golden path.
 
 ## Requirements
 
-- Node.js `>= 20` (see [`.nvmrc`](.nvmrc))
+- Node.js `>= 22.12` (see [`.nvmrc`](.nvmrc))
 - npm
 
 ## Development

@@ -10,7 +10,7 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
 
 - Cloudflare account, `ahmadabuhasan.com` already added to your Cloudflare zone.
 - GitHub repo `eby-dev/ahmadabuhasan` up to date on `main`.
-- Node.js `>= 20` locally (for verification builds).
+- Node.js `>= 22.12` locally (for verification builds).
 
 ---
 
@@ -26,7 +26,7 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
    - Build output directory: `dist`
    - Root directory: `/`
 4. **Environment variables** (Settings → Environment variables → Production):
-   - `NODE_VERSION` = `20`
+   - `NODE_VERSION` = `22`
 5. Click **Save and Deploy.** The first build should complete in ~2 minutes.
 
 ---
@@ -95,7 +95,7 @@ None of these need edits for a first deploy — they're wired up correctly:
 | `public/_redirects` | 301s for legacy PHP entrypoints and old single-page anchor URLs |
 | `public/robots.txt` | Allow all + sitemap link |
 | `public/site.webmanifest` | PWA manifest |
-| `.nvmrc` | Node 20 pin (used by CI; Cloudflare uses the env var above) |
+| `.nvmrc` | Node 22 pin (used by CI; Cloudflare uses the env var above) |
 | `scripts/prune-dist.mjs` | Post-build cleanup, ~3.5 MB of unreferenced originals removed |
 | `.github/workflows/ci.yml` | Runs format check, type check, build, and axe-core a11y test on every PR |
 
