@@ -1,0 +1,24 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import ProjectsSection from '@/components/sections/ProjectsSection.astro';
+import ItemListJsonLd from '@/components/seo/ItemListJsonLd.astro';
+
+const title = 'Projects';
+const description =
+  'Selected Android and Flutter projects across real estate, healthcare, government, and education.';
+
+type ProjectEntry = CollectionEntry<'projects'>;
+const entries: ProjectEntry[] = await getCollection('projects');
+entries.sort((a, b) => {
+  const oa = a.data.order ?? Number.POSITIVE_INFINITY;
+  const ob = b.data.order ?? Number.POSITIVE_INFINITY;
+  if (oa !== ob) return oa - ob;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+---
+
+<PageLayout title={title} description={description}>
+  <ProjectsSection mode="all" titleLevel={1} />
+  <ItemListJsonLd name="Projects by Ahmad Abu Hasan" entries={entries} />
+</PageLayout>

@@ -1,0 +1,32 @@
+---
+interface Props {
+  spacing?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { spacing = 'md', class: className = '' } = Astro.props;
+const classes = ['divider', `spacing-${spacing}`, className].filter(Boolean).join(' ');
+---
+
+<hr class={classes} />
+
+<style>
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-border);
+    border: 0;
+  }
+
+  .spacing-sm {
+    margin-block: var(--space-4);
+  }
+
+  .spacing-md {
+    margin-block: var(--space-8);
+  }
+
+  .spacing-lg {
+    margin-block: var(--space-12);
+  }
+</style>

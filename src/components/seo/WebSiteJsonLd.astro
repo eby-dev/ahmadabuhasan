@@ -1,0 +1,18 @@
+---
+import { SITE } from '@/config/site';
+import { PERSON_ID, WEBSITE_ID } from '@/utils/seo';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': WEBSITE_ID,
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.tagline,
+  inLanguage: SITE.locale,
+  author: { '@id': PERSON_ID },
+  publisher: { '@id': PERSON_ID },
+};
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -1,0 +1,108 @@
+---
+import '@fontsource-variable/geist';
+import '@/styles/global.css';
+import { SITE } from '@/config/site';
+import WebSiteJsonLd from '@/components/seo/WebSiteJsonLd.astro';
+import PersonJsonLd from '@/components/seo/PersonJsonLd.astro';
+
+type OgType = 'website' | 'article' | 'profile';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  emitPersonSchema?: boolean;
+  ogType?: OgType;
+}
+
+const {
+  title,
+  description,
+  image = SITE.ogDefaultImage,
+  noindex = false,
+  emitPersonSchema = false,
+  ogType = 'website',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, SITE.url);
+const ogImageURL = new URL(image, SITE.url).toString();
+const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+const cfToken = SITE.analytics.cloudflareToken;
+---
+
+<!-- Charset & viewport -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Anti-flash theme init. Sets data-theme + data-theme-stored on <html>
+     before body paint so components can style based on stored preference. -->
+<script is:inline>
+  (function () {
+    var stored = localStorage.getItem('theme');
+    var theme = stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+    var effective =
+      theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : theme;
+    document.documentElement.dataset.themeStored = theme;
+    document.documentElement.dataset.theme = effective;
+  })();
+</script>
+
+<!-- Primary meta -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE.name} />
+<link rel="canonical" href={canonicalURL.toString()} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+{!noindex && <meta name="robots" content="index, follow" />}
+
+<!-- Favicons -->
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+
+<!-- RSS feed discovery -->
+<link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Blog`} href="/rss.xml" />
+
+<!--
+  OpenGraph. Currently uses a 460×460 avatar; swap to a designed 1200×630
+  hero card when available and bump twitter:card to summary_large_image.
+-->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalURL.toString()} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter / X card (no @handle per D10). Summary card fits square avatar. -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+
+<!-- Structured data -->
+<WebSiteJsonLd />
+{emitPersonSchema && <PersonJsonLd />}
+
+<!-- Cloudflare Web Analytics (only when token is configured) -->
+{
+  cfToken && (
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={`{"token": "${cfToken}"}`}
+    />
+  )
+}

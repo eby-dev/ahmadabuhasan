@@ -1,0 +1,225 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import CreativeWorkJsonLd from '@/components/seo/CreativeWorkJsonLd.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<'projects'> };
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const description = data.description;
+const statusVariant =
+  data.status === 'shipped' ? 'success' : data.status === 'in-progress' ? 'accent' : 'muted';
+const statusLabel = data.status === 'in-progress' ? 'In progress' : data.status;
+
+const ogPreview = await getImage({
+  src: data.cover,
+  width: 1200,
+  format: 'webp',
+});
+---
+
+<PageLayout title={data.title} description={description} image={ogPreview.src} ogType="article">
+  <CreativeWorkJsonLd entry={entry} imageUrl={ogPreview.src} />
+  <BreadcrumbJsonLd
+    items={[
+      { name: 'Home', href: '/' },
+      { name: 'Projects', href: '/projects/' },
+      { name: data.title, href: `/projects/${entry.id}/` },
+    ]}
+  />
+  <Container narrow>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/projects">← All projects</a>
+    </nav>
+
+    <header class="head">
+      <div class="meta">
+        <Badge variant={statusVariant}>{statusLabel}</Badge>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>{data.category}</span>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>{data.sector}</span>
+      </div>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.description}</p>
+    </header>
+
+    <div class="cover">
+      <Image
+        src={data.cover}
+        alt={`${data.title} — cover screenshot`}
+        widths={[600, 1200]}
+        sizes="(max-width: 720px) 100vw, 720px"
+        loading="eager"
+      />
+    </div>
+
+    {
+      data.tech.length > 0 && (
+        <section aria-labelledby="tech-heading" class="tech-section">
+          <h2 id="tech-heading" class="section-h">
+            Tech
+          </h2>
+          <ul class="tech">
+            {data.tech.map((t) => (
+              <li>
+                <Badge variant="neutral">{t}</Badge>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      data.longDescription && (
+        <section class="prose">
+          <p>{data.longDescription}</p>
+        </section>
+      )
+    }
+
+    <section class="prose">
+      <Content />
+    </section>
+
+    {
+      (data.links.playStore || data.links.github || data.links.website) && (
+        <section aria-labelledby="links-heading" class="links-section">
+          <h2 id="links-heading" class="section-h">
+            Links
+          </h2>
+          <div class="link-buttons">
+            {data.links.playStore && (
+              <Button href={data.links.playStore} variant="secondary" size="sm" external>
+                Play Store
+              </Button>
+            )}
+            {data.links.github && (
+              <Button href={data.links.github} variant="secondary" size="sm" external>
+                GitHub
+              </Button>
+            )}
+            {data.links.website && (
+              <Button href={data.links.website} variant="secondary" size="sm" external>
+                Website
+              </Button>
+            )}
+          </div>
+        </section>
+      )
+    }
+  </Container>
+</PageLayout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: var(--space-6);
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-text);
+  }
+
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+
+  .head h1 {
+    margin: 0;
+    font-size: var(--fs-3xl);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .dot {
+    opacity: 0.6;
+  }
+
+  .lede {
+    color: var(--color-text-muted);
+    font-size: var(--fs-lg);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  .cover {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-12);
+    background-color: var(--color-surface);
+  }
+
+  .cover :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .section-h {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-3);
+  }
+
+  .tech-section,
+  .links-section {
+    margin-bottom: var(--space-10);
+  }
+
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .prose {
+    margin-bottom: var(--space-8);
+    color: var(--color-text);
+    line-height: var(--lh-normal);
+  }
+
+  .prose p {
+    margin-block: var(--space-4);
+  }
+
+  .link-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

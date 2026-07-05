@@ -1,0 +1,160 @@
+---
+/*
+ * ThemeToggle — cycles through: system → light → dark → system.
+ *
+ * The anti-flash script that sets `data-theme` on <html> lives in BaseHead
+ * so it runs before first paint. This component only handles user interaction.
+ * Works entirely client-side; no-JS users get whatever prefers-color-scheme provides.
+ */
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class="theme-toggle"
+  aria-label="Theme"
+  title="Toggle theme"
+>
+  <svg
+    class="icon icon-system"
+    aria-hidden="true"
+    width="18"
+    height="18"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <rect x="1.5" y="3" width="13" height="9" rx="1"></rect>
+    <path d="M5 14h6"></path>
+    <path d="M8 12v2"></path>
+  </svg>
+  <svg
+    class="icon icon-sun"
+    aria-hidden="true"
+    width="18"
+    height="18"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="8" cy="8" r="3"></circle>
+    <path
+      d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.9 11.9l1.05 1.05M3.05 12.95l1.06-1.05M11.9 4.11l1.05-1.06"
+    ></path>
+  </svg>
+  <svg
+    class="icon icon-moon"
+    aria-hidden="true"
+    width="18"
+    height="18"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    background: transparent;
+    transition:
+      color var(--motion-fast),
+      background-color var(--motion-fast);
+  }
+
+  .theme-toggle:hover,
+  .theme-toggle:focus-visible {
+    color: var(--color-text);
+    background-color: var(--color-surface-2);
+  }
+
+  .icon {
+    display: none;
+  }
+
+  :global(html[data-theme-stored='system']) .theme-toggle .icon-system {
+    display: block;
+  }
+  :global(html[data-theme-stored='light']) .theme-toggle .icon-sun {
+    display: block;
+  }
+  :global(html[data-theme-stored='dark']) .theme-toggle .icon-moon {
+    display: block;
+  }
+</style>
+
+<script>
+  type Theme = 'system' | 'light' | 'dark';
+
+  const STORAGE_KEY = 'theme';
+  const ORDER: Theme[] = ['system', 'light', 'dark'];
+
+  function resolveEffective(theme: Theme): 'light' | 'dark' {
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return theme;
+  }
+
+  function apply(theme: Theme): void {
+    const html = document.documentElement;
+    html.dataset.themeStored = theme;
+    if (theme === 'system') {
+      delete html.dataset.theme;
+      html.dataset.theme = resolveEffective(theme);
+    } else {
+      html.dataset.theme = theme;
+    }
+  }
+
+  function currentStored(): Theme {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw === 'light' || raw === 'dark' || raw === 'system') return raw;
+    return 'system';
+  }
+
+  const button = document.getElementById('theme-toggle');
+  if (button) {
+    button.addEventListener('click', () => {
+      const current = currentStored();
+      const nextIndex = (ORDER.indexOf(current) + 1) % ORDER.length;
+      const next = ORDER[nextIndex]!;
+      localStorage.setItem(STORAGE_KEY, next);
+      apply(next);
+      const effective = resolveEffective(next);
+      button.setAttribute(
+        'aria-label',
+        `Theme: ${next[0]!.toUpperCase() + next.slice(1)} (${effective}). Click to change.`,
+      );
+    });
+    // Initial label reflects the current stored preference.
+    const initial = currentStored();
+    const effective = resolveEffective(initial);
+    button.setAttribute(
+      'aria-label',
+      `Theme: ${initial[0]!.toUpperCase() + initial.slice(1)} (${effective}). Click to change.`,
+    );
+  }
+
+  // Re-apply on OS theme change when user is on "system".
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (currentStored() === 'system') apply('system');
+  });
+</script>

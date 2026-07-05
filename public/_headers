@@ -1,0 +1,32 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=15552000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://github.com https://*.githubusercontent.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests
+  # NOTE: 'unsafe-inline' on script-src/style-src is an accepted trade-off.
+  # Astro emits several small inline scripts (anti-flash theme init, theme-toggle
+  # handler, mobile-menu handler) and inline component <style> blocks. Their
+  # SHA hashes change on every build, so pinning them via _headers is brittle.
+  # This is a personal portfolio (no user-generated content, no XSS surface),
+  # so 'unsafe-inline' remains the pragmatic choice. Migrate to nonce/hash-based
+  # CSP if a Pages Function or edge nonce injection is introduced later.
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+/*.png
+  Cache-Control: public, max-age=86400
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400

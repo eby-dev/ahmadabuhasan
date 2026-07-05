@@ -1,0 +1,15 @@
+# Legacy filename entry points from the old PHP portfolio
+/index               /                301
+/index.html          /                301
+/index.php           /                301
+
+# Old single-page anchor paths → new dedicated routes
+/#about              /about           301
+/#resume             /experience      301
+/#portfolio          /projects        301
+/#contact            /contact         301
+/#skills             /skills          301
+/#home               /                301
+
+# www → apex fallback (the dashboard Rules entry is the primary; this is a safety net)
+https://www.ahmadabuhasan.com/*  https://ahmadabuhasan.com/:splat  301!

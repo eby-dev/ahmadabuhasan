@@ -1,0 +1,89 @@
+- id: android
+  order: 1
+  name: Android
+  items:
+    - Kotlin
+    - Java
+    - Android SDK
+    - Jetpack
+    - Material Design
+
+- id: architecture
+  order: 2
+  name: Architecture
+  items:
+    - MVP
+    - MVVM
+    - Clean Architecture
+    - Modularization
+    - Dagger 2
+    - Hilt
+    - Koin
+
+- id: async
+  order: 3
+  name: Async
+  items:
+    - Coroutines
+    - Flow
+    - RxJava
+
+- id: networking
+  order: 4
+  name: Networking
+  items:
+    - Retrofit
+    - OkHttp
+    - Dio
+    - REST API
+
+- id: database
+  order: 5
+  name: Database
+  items:
+    - Room
+    - GreenDAO
+    - Hive
+    - Firebase
+
+- id: flutter
+  order: 6
+  name: Flutter
+  items:
+    - Dart
+    - BLoC
+    - GetX
+
+- id: media-ml
+  order: 7
+  name: Media & ML
+  items:
+    - CameraX
+    - ML Kit
+    - TF Lite
+    - ExoPlayer
+
+- id: testing
+  order: 8
+  name: Testing
+  items:
+    - JUnit
+    - Mockito
+
+- id: delivery
+  order: 9
+  name: Delivery
+  items:
+    - Fastlane
+    - CI/CD
+    - GitHub Actions
+    - Play Store
+    - App Store
+
+- id: tools
+  order: 10
+  name: Tools
+  items:
+    - Git
+    - Android Studio
+    - Postman

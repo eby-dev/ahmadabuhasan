@@ -1,5 +1,0 @@
-Width: 400 pixels
-Height: 400 pixels
-Horizontal resolution: 96 dpi
-Vertical resolution: 96 dpi
-Bit depth: 24

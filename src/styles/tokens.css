@@ -1,0 +1,139 @@
+/*
+ * Design tokens — single source of truth for colors, type, spacing, radii, motion.
+ * Consumed by reset.css, global.css, and every CSS Module.
+ * Do not hard-code values elsewhere; extend this file instead.
+ */
+
+:root {
+  /* --- Colors: light theme (default) --- */
+  --color-bg: #ffffff;
+  --color-surface: #fafafa;
+  --color-surface-2: #f5f5f5;
+  --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
+  --color-text: #0a0a0a;
+  --color-text-muted: #525252;
+  --color-text-subtle: #737373;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-fg: #ffffff;
+  --color-danger: #dc2626;
+  --color-success: #15803d;
+
+  /* --- Typography --- */
+  --font-sans:
+    'Geist Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --fs-xs: 0.8rem;
+  --fs-sm: 0.9rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.563rem;
+  --fs-2xl: 1.953rem;
+  --fs-3xl: 2.441rem;
+  --fs-4xl: 3.052rem;
+
+  --lh-tight: 1.15;
+  --lh-snug: 1.35;
+  --lh-normal: 1.6;
+
+  --ls-tight: -0.02em;
+  --ls-snug: -0.01em;
+  --ls-normal: 0;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* --- Spacing (4pt scale) --- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* --- Radii --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  /* --- Elevation --- */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 5%);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 6%);
+  --shadow-lg: 0 8px 24px rgb(0 0 0 / 8%);
+
+  /* --- Motion --- */
+  --motion-fast: 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-base: 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-slow: 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* --- Layout --- */
+  --container-max: 1120px;
+  --container-narrow: 720px;
+  --container-padding: var(--space-6);
+
+  /* --- Focus ring --- */
+  --focus-ring: 2px solid var(--color-accent);
+  --focus-ring-offset: 2px;
+}
+
+/* --- Colors: dark theme --- */
+[data-theme='dark'] {
+  --color-bg: #0a0a0a;
+  --color-surface: #111111;
+  --color-surface-2: #171717;
+  --color-border: #262626;
+  --color-border-strong: #404040;
+  --color-text: #f5f5f5;
+  --color-text-muted: #a3a3a3;
+  --color-text-subtle: #737373;
+  --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
+  --color-accent-fg: #0a0a0a;
+  --color-danger: #f87171;
+  --color-success: #4ade80;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 45%);
+  --shadow-lg: 0 8px 24px rgb(0 0 0 / 50%);
+}
+
+/*
+ * When JS is disabled or no explicit override is stored, fall back to
+ * prefers-color-scheme. The theme-init inline script sets data-theme
+ * on <html> before paint; this @media rule handles the no-JS path.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg: #0a0a0a;
+    --color-surface: #111111;
+    --color-surface-2: #171717;
+    --color-border: #262626;
+    --color-border-strong: #404040;
+    --color-text: #f5f5f5;
+    --color-text-muted: #a3a3a3;
+    --color-text-subtle: #737373;
+    --color-accent: #60a5fa;
+    --color-accent-hover: #93c5fd;
+    --color-accent-fg: #0a0a0a;
+    --color-danger: #f87171;
+    --color-success: #4ade80;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 45%);
+    --shadow-lg: 0 8px 24px rgb(0 0 0 / 50%);
+  }
+}

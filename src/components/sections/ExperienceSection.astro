@@ -1,0 +1,252 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Badge from '@/components/ui/Badge.astro';
+import { formatDateRange, toISODate } from '@/utils/dates';
+
+interface Props {
+  showTitle?: boolean;
+  titleLevel?: 1 | 2 | 3;
+}
+
+const { showTitle = true, titleLevel = 2 } = Astro.props;
+
+const roleLevel = (titleLevel + 1) as 2 | 3 | 4;
+const RoleTag = `h${roleLevel}` as 'h2' | 'h3' | 'h4';
+
+type ExperienceEntry = CollectionEntry<'experience'>;
+
+const entries: ExperienceEntry[] = await getCollection('experience');
+entries.sort((a, b) => {
+  const bTime = b.data.startDate.getTime();
+  const aTime = a.data.startDate.getTime();
+  if (bTime !== aTime) return bTime - aTime;
+  return (a.data.order ?? 0) - (b.data.order ?? 0);
+});
+---
+
+<section class="experience" aria-labelledby={showTitle ? 'experience-heading' : undefined}>
+  <Container>
+    {
+      showTitle && (
+        <SectionTitle
+          id="experience-heading"
+          title="Experience"
+          description="Roles delivering production Android and Flutter apps since 2022."
+          level={titleLevel}
+        />
+      )
+    }
+
+    {
+      entries.length === 0 ? (
+        <p class="empty">Experience entries will be published soon.</p>
+      ) : (
+        <ol class="timeline">
+          {entries.map((entry) => {
+            const { data } = entry;
+            return (
+              <li class="item">
+                <div class="period">
+                  <time datetime={toISODate(data.startDate)}>
+                    {formatDateRange(data.startDate, data.endDate)}
+                  </time>
+                  <Badge variant="muted">{data.type}</Badge>
+                </div>
+
+                <div class="body">
+                  <RoleTag class="role">{data.role}</RoleTag>
+                  <p class="company">
+                    {data.companyUrl ? (
+                      <a
+                        href={data.companyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${data.company} (opens in a new tab)`}
+                      >
+                        {data.company}
+                      </a>
+                    ) : (
+                      data.company
+                    )}
+                    <span class="separator" aria-hidden="true">
+                      {' '}
+                      ·{' '}
+                    </span>
+                    <span class="location">{data.location}</span>
+                  </p>
+                  <p class="summary">{data.summary}</p>
+
+                  {data.highlights.length > 0 && (
+                    <ul class="highlights">
+                      {data.highlights.map((point) => (
+                        <li>{point}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {data.stack.length > 0 && (
+                    <ul class="stack" aria-label="Tech stack">
+                      {data.stack.map((tech) => (
+                        <li>
+                          <Badge variant="neutral">{tech}</Badge>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      )
+    }
+  </Container>
+</section>
+
+<style>
+  .experience {
+    padding-block: var(--space-12);
+  }
+
+  .empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-8);
+    position: relative;
+  }
+
+  .item::before {
+    content: '';
+    position: absolute;
+    left: 200px;
+    top: 8px;
+    bottom: -48px;
+    width: 1px;
+    background-color: var(--color-border);
+    transform: translateX(-24px);
+  }
+
+  .item:last-child::before {
+    display: none;
+  }
+
+  .item::after {
+    content: '';
+    position: absolute;
+    left: 200px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    transform: translateX(-28px);
+  }
+
+  .period {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .role {
+    font-size: var(--fs-xl);
+    margin: 0;
+  }
+
+  .company {
+    font-size: var(--fs-base);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .company a {
+    color: inherit;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--motion-fast);
+  }
+
+  .company a:hover {
+    border-color: var(--color-accent);
+  }
+
+  .location {
+    color: var(--color-text-muted);
+  }
+
+  .summary {
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: var(--lh-normal);
+  }
+
+  .highlights {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-left: var(--space-4);
+    color: var(--color-text-muted);
+    list-style: disc;
+  }
+
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    list-style: none;
+    padding: 0;
+  }
+
+  @media (max-width: 768px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      padding-left: var(--space-6);
+    }
+
+    .item::before {
+      left: 0;
+      top: 24px;
+      bottom: -48px;
+      transform: none;
+    }
+
+    .item::after {
+      left: 0;
+      top: 22px;
+      transform: translateX(-4px);
+    }
+
+    .period {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+</style>

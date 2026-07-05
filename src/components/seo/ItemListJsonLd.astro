@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { absoluteUrl } from '@/utils/seo';
+
+interface Props {
+  name: string;
+  entries: CollectionEntry<'projects'>[];
+}
+
+const { name, entries } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name,
+  numberOfItems: entries.length,
+  itemListElement: entries.map((entry, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: absoluteUrl(`/projects/${entry.id}/`),
+    name: entry.data.title,
+  })),
+};
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />

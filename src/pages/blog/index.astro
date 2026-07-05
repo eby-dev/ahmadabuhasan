@@ -1,0 +1,86 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import { formatFullDate, toISODate } from '@/utils/dates';
+
+const title = 'Blog';
+const description = 'Notes on Android, Flutter, and mobile engineering.';
+
+type BlogEntry = CollectionEntry<'blog'>;
+
+const posts: BlogEntry[] = await getCollection('blog', ({ data }) => !data.draft);
+posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<PageLayout title={title} description={description} noindex={posts.length === 0}>
+  <Container narrow>
+    <SectionTitle title="Blog" level={1} />
+
+    {
+      posts.length === 0 ? (
+        <p class="empty">
+          Notes and posts will appear here. Nothing published yet — check back later.
+        </p>
+      ) : (
+        <ul class="list">
+          {posts.map((post) => (
+            <li class="item">
+              <a href={`/blog/${post.id}`} class="link">
+                <time datetime={toISODate(post.data.publishedAt)} class="date">
+                  {formatFullDate(post.data.publishedAt)}
+                </time>
+                <h2 class="title">{post.data.title}</h2>
+                <p class="desc">{post.data.description}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </Container>
+</PageLayout>
+
+<style>
+  .empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .link {
+    display: block;
+    color: inherit;
+  }
+
+  .link:hover .title {
+    color: var(--color-accent);
+  }
+
+  .date {
+    display: block;
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .title {
+    font-size: var(--fs-xl);
+    margin: 0 0 var(--space-2);
+    transition: color var(--motion-fast);
+  }
+
+  .desc {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+</style>

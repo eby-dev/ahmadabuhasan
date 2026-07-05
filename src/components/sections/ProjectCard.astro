@@ -1,0 +1,205 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Badge from '@/components/ui/Badge.astro';
+import Card from '@/components/ui/Card.astro';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  headingLevel?: 2 | 3 | 4;
+}
+
+const { entry, headingLevel = 3 } = Astro.props;
+const { data } = entry;
+const TitleTag = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+
+const statusVariant =
+  data.status === 'shipped' ? 'success' : data.status === 'in-progress' ? 'accent' : 'muted';
+
+const statusLabel = data.status === 'in-progress' ? 'In progress' : data.status;
+---
+
+<Card interactive padding="none" as="article" class="project-card">
+  <div class="media">
+    <Image
+      src={data.cover}
+      alt={`${data.title} — screenshot`}
+      widths={[400, 800]}
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="body">
+    <header class="head">
+      <TitleTag class="title">{data.title}</TitleTag>
+      <Badge variant={statusVariant}>{statusLabel}</Badge>
+    </header>
+
+    <p class="meta">
+      <span>{data.category}</span>
+      <span aria-hidden="true"> · </span>
+      <span>{data.sector}</span>
+    </p>
+
+    <p class="description">{data.description}</p>
+
+    {
+      data.tech.length > 0 && (
+        <ul class="tech" aria-label="Tech used">
+          {data.tech.slice(0, 6).map((t) => (
+            <li>
+              <Badge variant="neutral">{t}</Badge>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <footer class="links">
+      {
+        data.links.playStore && (
+          <a
+            href={data.links.playStore}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${data.title} on Google Play`}
+          >
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.294ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27 7.583 7.32l3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z" />
+            </svg>
+            <span>Play Store</span>
+          </a>
+        )
+      }
+      {
+        data.links.github && (
+          <a
+            href={data.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${data.title} on GitHub`}
+          >
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+            </svg>
+            <span>GitHub</span>
+          </a>
+        )
+      }
+      {
+        data.links.website && (
+          <a
+            href={data.links.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${data.title} website`}
+          >
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="8" cy="8" r="6.5" />
+              <path d="M1.5 8h13" />
+              <path d="M8 1.5c2 2 3 4.5 3 6.5s-1 4.5-3 6.5c-2-2-3-4.5-3-6.5s1-4.5 3-6.5Z" />
+            </svg>
+            <span>Website</span>
+          </a>
+        )
+      }
+    </footer>
+  </div>
+</Card>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--color-surface);
+  }
+
+  .media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    flex: 1;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .title {
+    font-size: var(--fs-xl);
+    margin: 0;
+  }
+
+  .meta {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    margin: 0;
+  }
+
+  .description {
+    color: var(--color-text);
+    margin: 0;
+    font-size: var(--fs-base);
+    line-height: var(--lh-normal);
+  }
+
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-1) 0 0;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: auto;
+    padding-top: var(--space-3);
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    transition: color var(--motion-fast);
+  }
+
+  .links a:hover {
+    color: var(--color-text);
+  }
+</style>

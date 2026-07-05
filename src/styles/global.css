@@ -1,0 +1,121 @@
+/*
+ * Global styles — imports tokens + reset, then applies base typography,
+ * link behavior, form baseline, and utility classes for skip link + sr-only.
+ * Component-scoped styles live in CSS Modules alongside their components.
+ */
+
+@import './tokens.css';
+@import './reset.css';
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  color-scheme: light dark;
+}
+
+body {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* --- Type scale defaults (can be overridden per section) --- */
+h1 {
+  font-size: var(--fs-4xl);
+  letter-spacing: var(--ls-tight);
+}
+h2 {
+  font-size: var(--fs-3xl);
+}
+h3 {
+  font-size: var(--fs-2xl);
+}
+h4 {
+  font-size: var(--fs-xl);
+}
+h5 {
+  font-size: var(--fs-lg);
+}
+h6 {
+  font-size: var(--fs-base);
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: var(--fs-3xl);
+  }
+  h2 {
+    font-size: var(--fs-2xl);
+  }
+  h3 {
+    font-size: var(--fs-xl);
+  }
+}
+
+/* --- Links --- */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--motion-fast);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* --- Selection --- */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+/* --- Utility: visually hidden but screen-reader accessible --- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Utility: skip link (revealed on focus) --- */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  font-weight: var(--fw-medium);
+  transform: translateY(-100%);
+  transition: transform var(--motion-fast);
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* --- Container helper (used inline by Container.astro) --- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+.container-narrow {
+  max-width: var(--container-narrow);
+}

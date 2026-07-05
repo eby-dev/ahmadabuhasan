@@ -1,0 +1,103 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+
+interface Props {
+  showTitle?: boolean;
+  titleLevel?: 1 | 2 | 3;
+}
+
+const { showTitle = true, titleLevel = 2 } = Astro.props;
+
+const groupLevel = (titleLevel + 1) as 2 | 3 | 4;
+const GroupTag = `h${groupLevel}` as 'h2' | 'h3' | 'h4';
+
+type SkillGroup = CollectionEntry<'skills'>;
+
+const groups: SkillGroup[] = await getCollection('skills');
+groups.sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="skills" aria-labelledby={showTitle ? 'skills-heading' : undefined}>
+  <Container>
+    {
+      showTitle && (
+        <SectionTitle
+          id="skills-heading"
+          title="Skills"
+          description="Tools and technologies I use to ship production mobile apps."
+          level={titleLevel}
+        />
+      )
+    }
+
+    {
+      groups.length === 0 ? (
+        <p class="empty">Skills will be published soon.</p>
+      ) : (
+        <div class="grid">
+          {groups.map((group) => (
+            <article class="group">
+              <GroupTag class="group-name">{group.data.name}</GroupTag>
+              <ul class="items">
+                {group.data.items.map((item) => (
+                  <li class="item">{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      )
+    }
+  </Container>
+</section>
+
+<style>
+  .skills {
+    padding-block: var(--space-12);
+  }
+
+  .empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .group-name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .item {
+    padding: var(--space-1) 0;
+    color: var(--color-text);
+    font-size: var(--fs-base);
+  }
+</style>

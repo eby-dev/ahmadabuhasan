@@ -1,0 +1,57 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<PageLayout title="Not Found" description="The page you are looking for does not exist." noindex>
+  <Container narrow>
+    <section class="not-found">
+      <p class="code">404</p>
+      <h1>Page not found</h1>
+      <p class="description">
+        The page you are looking for does not exist, has moved, or is not available yet.
+      </p>
+      <div class="actions">
+        <Button href="/" variant="primary" size="md">Back to home</Button>
+        <Button href="/projects" variant="secondary" size="md">See projects</Button>
+      </div>
+    </section>
+  </Container>
+</PageLayout>
+
+<style>
+  .not-found {
+    padding-block: var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: var(--fs-3xl);
+  }
+
+  .description {
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin: 0;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+</style>

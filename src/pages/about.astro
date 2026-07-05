@@ -1,0 +1,12 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import AboutSection from '@/components/sections/AboutSection.astro';
+
+const title = 'About';
+const description =
+  'Mobile Developer focused on clean architecture, modularization, and CI/CD across Android (Kotlin/Java) and Flutter.';
+---
+
+<PageLayout title={title} description={description} emitPersonSchema ogType="profile">
+  <AboutSection variant="full" titleLevel={1} />
+</PageLayout>

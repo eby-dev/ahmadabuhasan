@@ -1,0 +1,120 @@
+---
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Button from '@/components/ui/Button.astro';
+import { SITE } from '@/config/site';
+
+interface Props {
+  variant?: 'short' | 'full';
+  showTitle?: boolean;
+  titleLevel?: 1 | 2 | 3;
+}
+
+const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
+---
+
+<section class="about" aria-labelledby={showTitle ? 'about-heading' : undefined}>
+  <Container narrow>
+    {
+      showTitle && (
+        <SectionTitle
+          id="about-heading"
+          title="About"
+          description="Mobile Developer focused on production-grade Android and Flutter apps."
+          level={titleLevel}
+        />
+      )
+    }
+
+    <div class="prose">
+      <p>
+        I'm a Mobile Developer with 3+ years of experience shipping production Android (Kotlin/Java)
+        and Flutter apps. I currently work at
+        <strong>Brighton Real Estate</strong> in Surabaya, building a full-scale property platform with
+        50+ feature screens.
+      </p>
+
+      {
+        variant === 'full' && (
+          <>
+            <p>
+              Previously I delivered apps across healthcare, education, and government sectors — a
+              hospital super-app, a school payment system, and a government attendance app with TF
+              Lite face recognition that was featured in <em>Radar Madura</em>. Combined, my Play
+              Store apps have crossed 2,000+ downloads.
+            </p>
+            <p>
+              I care about clean architecture, modularization, and CI/CD. Most of my work is MVP +
+              Dagger 2 on legacy Android, MVVM + Hilt on newer Kotlin projects, and GetX or BLoC on
+              Flutter. I'm currently open to full-time, contract, or remote/hybrid mobile work — if
+              you're building something solid, let's talk.
+            </p>
+          </>
+        )
+      }
+
+      {
+        variant === 'short' && (
+          <p>
+            Previously delivered apps for healthcare, education, and government — including a
+            hospital super-app, a school payment system, and a government attendance app featured in{' '}
+            <em>Radar Madura</em>.
+          </p>
+        )
+      }
+    </div>
+
+    {
+      variant === 'full' && (
+        <div class="actions">
+          <Button href={SITE.cvUrl} variant="secondary" size="md" external>
+            Download CV
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 2h8v8" />
+              <path d="M14 2 4 12" />
+            </svg>
+          </Button>
+        </div>
+      )
+    }
+  </Container>
+</section>
+
+<style>
+  .about {
+    padding-block: var(--space-12);
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--color-text);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-normal);
+  }
+
+  .prose strong {
+    font-weight: var(--fw-semibold);
+  }
+
+  .actions {
+    margin-top: var(--space-8);
+  }
+
+  @media (max-width: 640px) {
+    .prose {
+      font-size: var(--fs-base);
+    }
+  }
+</style>

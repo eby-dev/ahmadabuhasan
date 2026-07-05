@@ -1,0 +1,13 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import AboutSection from '@/components/sections/AboutSection.astro';
+import ProjectsSection from '@/components/sections/ProjectsSection.astro';
+import { SITE } from '@/config/site';
+---
+
+<PageLayout title={SITE.name} description={SITE.tagline} emitPersonSchema>
+  <Hero />
+  <AboutSection variant="short" showTitle={false} />
+  <ProjectsSection mode="featured" showViewAll />
+</PageLayout>

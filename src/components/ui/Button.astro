@@ -1,0 +1,139 @@
+---
+type Variant = 'primary' | 'secondary' | 'ghost';
+type Size = 'sm' | 'md' | 'lg';
+
+interface Props {
+  variant?: Variant;
+  size?: Size;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  external?: boolean;
+  disabled?: boolean;
+  fullWidth?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  external = false,
+  disabled = false,
+  fullWidth = false,
+  class: className = '',
+  ariaLabel,
+} = Astro.props;
+
+const classes = ['btn', `variant-${variant}`, `size-${size}`, fullWidth && 'full-width', className]
+  .filter(Boolean)
+  .join(' ');
+
+const isLink = Boolean(href);
+const rel = external ? 'noopener noreferrer' : undefined;
+const target = external ? '_blank' : undefined;
+---
+
+{
+  isLink ? (
+    <a
+      href={href}
+      class={classes}
+      target={target}
+      rel={rel}
+      aria-label={ariaLabel}
+      aria-disabled={disabled ? 'true' : undefined}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} disabled={disabled} aria-label={ariaLabel}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: inherit;
+    font-weight: var(--fw-medium);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color var(--motion-fast),
+      color var(--motion-fast),
+      border-color var(--motion-fast),
+      transform var(--motion-fast);
+  }
+
+  .btn[aria-disabled='true'],
+  .btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .size-sm {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-sm);
+  }
+
+  .size-md {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--fs-base);
+  }
+
+  .size-lg {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--fs-lg);
+  }
+
+  .variant-primary {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+
+  .variant-primary:hover {
+    background-color: var(--color-text-muted);
+    border-color: var(--color-text-muted);
+  }
+
+  .variant-secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+
+  .variant-secondary:hover {
+    background-color: var(--color-surface);
+    border-color: var(--color-text-muted);
+  }
+
+  .variant-ghost {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border-color: transparent;
+  }
+
+  .variant-ghost:hover {
+    background-color: var(--color-surface-2);
+    color: var(--color-text);
+  }
+
+  .full-width {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+
+interface Props {
+  showTitle?: boolean;
+}
+
+const { showTitle = true } = Astro.props;
+
+/**
+ * Single hardcoded entry per BLUEPRINT_STEP2 §8.4 — one item does not
+ * warrant a full collection. Add more entries here if they materialize.
+ */
+const EDUCATION = [
+  {
+    institution: 'STMIK Yadika Bangil',
+    degree: 'Informatics Engineering',
+    period: '2017 — 2021',
+    location: 'Pasuruan, East Java, Indonesia',
+  },
+] as const;
+---
+
+<section class="education" aria-labelledby={showTitle ? 'education-heading' : undefined}>
+  <Container>
+    {showTitle && <SectionTitle id="education-heading" title="Education" level={2} />}
+
+    <ul class="list">
+      {
+        EDUCATION.map((entry) => (
+          <li class="item">
+            <div class="period">
+              <span>{entry.period}</span>
+            </div>
+            <div class="body">
+              <h3 class="institution">{entry.institution}</h3>
+              <p class="degree">{entry.degree}</p>
+              <p class="location">{entry.location}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</section>
+
+<style>
+  .education {
+    padding-block: var(--space-12);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-8);
+  }
+
+  .period {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .institution {
+    font-size: var(--fs-xl);
+    margin: 0;
+  }
+
+  .degree,
+  .location {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

@@ -1,0 +1,260 @@
+---
+import { getCollection } from 'astro:content';
+import { PRIMARY_NAV, isActiveNav, type NavItem } from '@/config/nav';
+import { SITE } from '@/config/site';
+import ThemeToggle from '@/components/ui/ThemeToggle.astro';
+
+const currentPath = Astro.url.pathname;
+
+const publishedBlog = await getCollection('blog', ({ data }) => !data.draft);
+const showBlog = publishedBlog.length > 0;
+
+const items: readonly NavItem[] = showBlog
+  ? [
+      ...PRIMARY_NAV.slice(0, -1),
+      { label: 'Blog', href: '/blog' },
+      PRIMARY_NAV[PRIMARY_NAV.length - 1]!,
+    ]
+  : PRIMARY_NAV;
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label={`${SITE.name}, home`}>
+    <span class="brand-name">{SITE.name}</span>
+    <span class="brand-role">{SITE.role}</span>
+  </a>
+
+  <nav class="primary-nav" aria-label="Primary">
+    <ul>
+      {
+        items.map((item) => {
+          const active = isActiveNav(currentPath, item.href);
+          return (
+            <li>
+              <a
+                href={item.href}
+                aria-current={active ? 'page' : undefined}
+                class:list={['nav-link', active && 'is-active']}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+
+  <div class="header-tools">
+    <ThemeToggle />
+    <button
+      type="button"
+      class="menu-toggle"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      aria-label="Menu"
+      id="menu-toggle"
+    >
+      <svg
+        aria-hidden="true"
+        width="20"
+        height="20"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      >
+        <path d="M2 4h12M2 8h12M2 12h12" class="icon-open"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<nav id="mobile-menu" class="mobile-menu" aria-label="Mobile" hidden>
+  <ul>
+    {
+      items.map((item) => {
+        const active = isActiveNav(currentPath, item.href);
+        return (
+          <li>
+            <a
+              href={item.href}
+              aria-current={active ? 'page' : undefined}
+              class:list={['mobile-link', active && 'is-active']}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+
+<style>
+  .site-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--container-padding);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: saturate(180%) blur(6px);
+  }
+
+  .brand {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  .brand-name {
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-base);
+  }
+
+  .brand-role {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .primary-nav ul {
+    display: flex;
+    gap: var(--space-1);
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--radius-sm);
+    transition:
+      color var(--motion-fast),
+      background-color var(--motion-fast);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--color-text);
+    background-color: var(--color-surface-2);
+  }
+
+  .nav-link.is-active {
+    color: var(--color-text);
+  }
+
+  .header-tools {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .menu-toggle {
+    display: none;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+  }
+
+  .menu-toggle:hover,
+  .menu-toggle:focus-visible {
+    color: var(--color-text);
+    background-color: var(--color-surface-2);
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  .mobile-menu ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: var(--space-4) var(--container-padding);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+  }
+
+  .mobile-link {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-text);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-medium);
+    border-radius: var(--radius-sm);
+  }
+
+  .mobile-link:hover,
+  .mobile-link:focus-visible,
+  .mobile-link.is-active {
+    background-color: var(--color-surface-2);
+  }
+
+  @media (max-width: 768px) {
+    .primary-nav {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: inline-flex;
+    }
+
+    .mobile-menu[data-open='true'] {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const open = menu.dataset.open === 'true';
+      const next = !open;
+      menu.dataset.open = next ? 'true' : 'false';
+      menu.hidden = !next;
+      toggle.setAttribute('aria-expanded', String(next));
+    });
+
+    menu.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target instanceof HTMLAnchorElement) {
+        menu.dataset.open = 'false';
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.dataset.open === 'true') {
+        menu.dataset.open = 'false';
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus();
+      }
+    });
+  }
+</script>

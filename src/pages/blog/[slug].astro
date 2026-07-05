@@ -1,0 +1,114 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import { formatFullDate, toISODate } from '@/utils/dates';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+type Props = { post: CollectionEntry<'blog'> };
+const { post } = Astro.props;
+const { data } = post;
+const { Content } = await render(post);
+---
+
+<PageLayout title={data.title} description={data.description}>
+  <Container narrow>
+    <article>
+      <header class="post-header">
+        <p class="breadcrumb">
+          <a href="/blog">← All posts</a>
+        </p>
+        <h1>{data.title}</h1>
+        <time datetime={toISODate(data.publishedAt)} class="date">
+          {formatFullDate(data.publishedAt)}
+        </time>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </Container>
+</PageLayout>
+
+<style>
+  .post-header {
+    margin-bottom: var(--space-10);
+  }
+
+  .breadcrumb {
+    margin: 0 0 var(--space-6);
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-text);
+  }
+
+  .post-header h1 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--fs-3xl);
+  }
+
+  .date {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .prose {
+    color: var(--color-text);
+    line-height: var(--lh-normal);
+    font-size: var(--fs-lg);
+  }
+
+  .prose :global(p) {
+    margin-block: var(--space-4);
+  }
+
+  .prose :global(h2) {
+    font-size: var(--fs-2xl);
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-3);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--fs-xl);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-2);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: var(--color-surface-2);
+    padding: 0.15em 0.35em;
+    border-radius: var(--radius-sm);
+  }
+
+  .prose :global(pre) {
+    background-color: var(--color-surface-2);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-size: var(--fs-sm);
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .prose :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

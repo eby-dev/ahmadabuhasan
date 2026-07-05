@@ -1,0 +1,79 @@
+---
+import Container from '@/components/layout/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import { SITE } from '@/config/site';
+---
+
+<section class="hero" aria-labelledby="hero-heading">
+  <Container narrow>
+    <p class="greeting">Hello, I'm</p>
+    <h1 id="hero-heading" class="name">{SITE.name}</h1>
+    <p class="role">{SITE.role}</p>
+    <p class="subtitle">{SITE.subtitle}</p>
+
+    <div class="cta-group">
+      <Button href="/projects" variant="primary" size="md"> View Projects </Button>
+      <Button href="/contact" variant="secondary" size="md"> Contact Me </Button>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--space-24) var(--space-16);
+  }
+
+  .greeting {
+    font-size: var(--fs-lg);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-2);
+    font-weight: var(--fw-regular);
+  }
+
+  .name {
+    font-size: var(--fs-4xl);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-tight);
+    margin: 0;
+  }
+
+  .role {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-medium);
+    color: var(--color-accent);
+    letter-spacing: var(--ls-snug);
+    margin: var(--space-3) 0 var(--space-6);
+  }
+
+  .subtitle {
+    font-size: var(--fs-lg);
+    color: var(--color-text-muted);
+    max-width: 55ch;
+    margin: 0 0 var(--space-8);
+  }
+
+  .cta-group {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding-block: var(--space-16) var(--space-12);
+    }
+
+    .name {
+      font-size: var(--fs-3xl);
+    }
+
+    .role {
+      font-size: var(--fs-xl);
+    }
+
+    .subtitle {
+      font-size: var(--fs-base);
+    }
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import ExperienceSection from '@/components/sections/ExperienceSection.astro';
+import EducationSection from '@/components/sections/EducationSection.astro';
+
+const title = 'Experience';
+const description =
+  'Roles at Brighton Real Estate, CV. Natusi, and Indoweb.id delivering production Android and Flutter apps since 2022.';
+---
+
+<PageLayout title={title} description={description}>
+  <ExperienceSection titleLevel={1} />
+  <EducationSection />
+</PageLayout>

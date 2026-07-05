@@ -1,0 +1,34 @@
+---
+import BaseHead from '@/components/layout/BaseHead.astro';
+import { SITE } from '@/config/site';
+
+type OgType = 'website' | 'article' | 'profile';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  emitPersonSchema?: boolean;
+  ogType?: OgType;
+}
+
+const { title, description, image, noindex, emitPersonSchema, ogType } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.locale}>
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      noindex={noindex}
+      emitPersonSchema={emitPersonSchema}
+      ogType={ogType}
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

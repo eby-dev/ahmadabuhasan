@@ -1,0 +1,133 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Button from '@/components/ui/Button.astro';
+import ProjectCard from './ProjectCard.astro';
+
+type Mode = 'featured' | 'all';
+type Category = 'all' | 'Android Native' | 'Flutter';
+
+interface Props {
+  mode?: Mode;
+  filterBy?: Category;
+  showTitle?: boolean;
+  showViewAll?: boolean;
+  limit?: number;
+  titleLevel?: 1 | 2 | 3;
+}
+
+const {
+  mode = 'all',
+  filterBy = 'all',
+  showTitle = true,
+  showViewAll = false,
+  limit,
+  titleLevel = 2,
+} = Astro.props;
+
+type ProjectEntry = CollectionEntry<'projects'>;
+let entries: ProjectEntry[] = await getCollection('projects');
+
+if (mode === 'featured') {
+  entries = entries.filter((e) => e.data.featured);
+}
+
+if (filterBy !== 'all') {
+  entries = entries.filter((e) => e.data.category === filterBy);
+}
+
+entries.sort((a, b) => {
+  const oa = a.data.order ?? Number.POSITIVE_INFINITY;
+  const ob = b.data.order ?? Number.POSITIVE_INFINITY;
+  if (oa !== ob) return oa - ob;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+
+if (typeof limit === 'number') {
+  entries = entries.slice(0, limit);
+}
+---
+
+<section class="projects" aria-labelledby={showTitle ? 'projects-heading' : undefined}>
+  <Container>
+    {
+      showTitle && (
+        <SectionTitle
+          id="projects-heading"
+          title={mode === 'featured' ? 'Selected Projects' : 'Projects'}
+          description={
+            mode === 'featured'
+              ? 'A few production apps I have shipped recently.'
+              : 'Production Android and Flutter apps across real estate, healthcare, education, and government.'
+          }
+          level={titleLevel}
+        />
+      )
+    }
+
+    {
+      entries.length === 0 ? (
+        <p class="empty">Projects will be published soon.</p>
+      ) : (
+        <ul class="grid">
+          {entries.map((entry) => (
+            <li>
+              <ProjectCard entry={entry} headingLevel={(titleLevel + 1) as 2 | 3 | 4} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      showViewAll && entries.length > 0 && (
+        <div class="view-all">
+          <Button href="/projects" variant="secondary" size="md">
+            View all projects
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 8h12" />
+              <path d="M9 3l5 5-5 5" />
+            </svg>
+          </Button>
+        </div>
+      )
+    }
+  </Container>
+</section>
+
+<style>
+  .projects {
+    padding-block: var(--space-12);
+  }
+
+  .empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .view-all {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-12);
+  }
+</style>

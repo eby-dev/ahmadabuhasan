@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { SITE } from '@/config/site';
+import { PERSON_ID, absoluteUrl } from '@/utils/seo';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  imageUrl: string;
+}
+
+const { entry, imageUrl } = Astro.props;
+const { data } = entry;
+
+const operatingSystem = data.category === 'Android Native' ? 'Android' : 'Android, iOS';
+
+const applicationCategory =
+  data.sector === 'Healthcare'
+    ? 'HealthApplication'
+    : data.sector === 'Education'
+      ? 'EducationalApplication'
+      : data.sector === 'Government'
+        ? 'BusinessApplication'
+        : data.sector === 'Real Estate'
+          ? 'BusinessApplication'
+          : 'UtilitiesApplication';
+
+const canonical = absoluteUrl(`/projects/${entry.id}/`);
+
+const schema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  '@id': `${canonical}#project`,
+  name: data.title,
+  description: data.description,
+  url: canonical,
+  image: absoluteUrl(imageUrl),
+  author: { '@id': PERSON_ID },
+  creator: { '@id': PERSON_ID },
+  publisher: { '@id': PERSON_ID },
+  applicationCategory,
+  operatingSystem,
+  inLanguage: SITE.locale,
+  datePublished: data.publishedAt.toISOString().slice(0, 10),
+  keywords: data.tech.join(', '),
+};
+
+if (data.links.playStore) {
+  schema.downloadUrl = data.links.playStore;
+  schema.installUrl = data.links.playStore;
+}
+if (data.links.website) {
+  schema.sameAs = [data.links.website];
+}
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
