@@ -69,6 +69,9 @@ jobs:
           name: dist
           path: dist
 
+      - name: Sync Chrome + ChromeDriver
+        run: npx --yes browser-driver-manager@latest install chrome
+
       - name: Serve site
         run: npx http-server dist -p 4321 -s -c-1 &
 
