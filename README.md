@@ -32,16 +32,16 @@ Local server: <http://localhost:4321>.
 
 ## Available scripts
 
-| Command | Purpose |
-|---|---|
-| `npm run dev` | Start dev server |
-| `npm run build` | Type-check and build static output to `dist/` |
-| `npm run preview` | Preview the production build locally |
-| `npm run check` | Astro type & diagnostic check |
-| `npm run typecheck` | TypeScript compiler check |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier write |
-| `npm run format:check` | Prettier check |
+| Command                | Purpose                                       |
+| ---------------------- | --------------------------------------------- |
+| `npm run dev`          | Start dev server                              |
+| `npm run build`        | Type-check and build static output to `dist/` |
+| `npm run preview`      | Preview the production build locally          |
+| `npm run check`        | Astro type & diagnostic check                 |
+| `npm run typecheck`    | TypeScript compiler check                     |
+| `npm run lint`         | ESLint                                        |
+| `npm run format`       | Prettier write                                |
+| `npm run format:check` | Prettier check                                |
 
 ## Deployment
 

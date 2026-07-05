@@ -45,6 +45,7 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
 Two options; pick one (both work — Rule is faster and more explicit).
 
 **Option A (recommended) — Rules → Redirect Rules** (Websites → ahmadabuhasan.com → Rules → Redirect Rules → Create rule):
+
 - When: Hostname equals `www.ahmadabuhasan.com`
 - Then: Static redirect → `https://ahmadabuhasan.com/${1}`
 - Status: `301`
@@ -88,16 +89,16 @@ Only takes effect after you paste the token into the repo.
 
 None of these need edits for a first deploy — they're wired up correctly:
 
-| File | Purpose |
-|---|---|
-| `astro.config.mjs` | `site: 'https://ahmadabuhasan.com'`, `output: 'static'`, sitemap integration |
-| `public/_headers` | CSP, HSTS, `Referrer-Policy`, `Permissions-Policy`, cache-control per asset type |
-| `public/_redirects` | 301s for legacy PHP entrypoints and old single-page anchor URLs |
-| `public/robots.txt` | Allow all + sitemap link |
-| `public/site.webmanifest` | PWA manifest |
-| `.nvmrc` | Node 22 pin (used by CI; Cloudflare uses the env var above) |
-| `scripts/prune-dist.mjs` | Post-build cleanup, ~3.5 MB of unreferenced originals removed |
-| `.github/workflows/ci.yml` | Runs format check, type check, build, and axe-core a11y test on every PR |
+| File                       | Purpose                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| `astro.config.mjs`         | `site: 'https://ahmadabuhasan.com'`, `output: 'static'`, sitemap integration     |
+| `public/_headers`          | CSP, HSTS, `Referrer-Policy`, `Permissions-Policy`, cache-control per asset type |
+| `public/_redirects`        | 301s for legacy PHP entrypoints and old single-page anchor URLs                  |
+| `public/robots.txt`        | Allow all + sitemap link                                                         |
+| `public/site.webmanifest`  | PWA manifest                                                                     |
+| `.nvmrc`                   | Node 22 pin (used by CI; Cloudflare uses the env var above)                      |
+| `scripts/prune-dist.mjs`   | Post-build cleanup, ~3.5 MB of unreferenced originals removed                    |
+| `.github/workflows/ci.yml` | Runs format check, type check, build, and axe-core a11y test on every PR         |
 
 ---
 
@@ -169,6 +170,7 @@ Check the `Content-Security-Policy` in `public/_headers` includes `font-src 'sel
 CSP `form-action` and `connect-src` must include `https://formspree.io`. Both are present.
 
 **Lighthouse Performance is below 95.**
+
 - Check that `public/_headers` reached Cloudflare — response headers on any `/_astro/*` URL should show `Cache-Control: immutable`.
 - Confirm no third-party analytics script is loading before the token is set (`SITE.analytics.cloudflareToken` empty = no beacon emitted).
 - Rerun after your Cloudflare Web Analytics token is set — the beacon adds ~5 KB but with `defer` should not affect LCP.
