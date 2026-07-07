@@ -1,6 +1,7 @@
 ---
 import Container from '@/components/layout/Container.astro';
 import Button from '@/components/ui/Button.astro';
+import SocialLinks from '@/components/ui/SocialLinks.astro';
 import { SITE } from '@/config/site';
 ---
 
@@ -9,6 +10,11 @@ import { SITE } from '@/config/site';
     <p class="greeting">Hello, I'm</p>
     <h1 id="hero-heading" class="name">{SITE.name}</h1>
     <p class="role">{SITE.role}</p>
+
+    <div class="hero-socials">
+      <SocialLinks size="sm" />
+    </div>
+
     <p class="subtitle">{SITE.subtitle}</p>
 
     <div class="cta-group">
@@ -43,7 +49,13 @@ import { SITE } from '@/config/site';
     font-weight: var(--fw-medium);
     color: var(--color-accent);
     letter-spacing: var(--ls-snug);
-    margin: var(--space-3) 0 var(--space-6);
+    margin: var(--space-3) 0 var(--space-4);
+  }
+
+  .hero-socials {
+    margin: 0 0 var(--space-8);
+    /* Nudge icons flush-left with the hero text baseline */
+    margin-left: calc(var(--space-2) * -1);
   }
 
   .subtitle {
