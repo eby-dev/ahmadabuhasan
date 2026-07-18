@@ -68,11 +68,3 @@ public/       # static assets served as-is
 ## License
 
 All rights reserved — see [LICENSE](./LICENSE).
-
-## Blueprint
-
-Design and architecture decisions are documented in:
-
-- [BLUEPRINT.md](./BLUEPRINT.md) — original brief
-- [BLUEPRINT_REPORT.md](./BLUEPRINT_REPORT.md) — STEP 1: analysis
-- [BLUEPRINT_STEP2.md](./BLUEPRINT_STEP2.md) — STEP 2: detailed architecture
