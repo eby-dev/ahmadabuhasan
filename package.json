@@ -52,5 +52,8 @@
     "prettier": "^3.4.0",
     "prettier-plugin-astro": "^0.14.0",
     "wait-on": "^9.0.10"
+  },
+  "overrides": {
+    "adm-zip": "^0.6.0"
   }
 }
