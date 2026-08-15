@@ -125,6 +125,15 @@ if (typeof limit === 'number') {
     margin: 0;
   }
 
+  .grid > li {
+    display: flex;
+    height: 100%;
+  }
+
+  .grid > li > :global(.project-card) {
+    width: 100%;
+  }
+
   .view-all {
     display: flex;
     justify-content: center;
