@@ -3,15 +3,20 @@ title: SG Sehat
 category: Flutter
 sector: Healthcare
 description: >-
-  Hospital super-app with virtual clinic (Zego video call), doctor booking,
-  Google Maps, OneSignal push notifications, and Flame game engine.
+  Hospital super-app for Cipta Nirmala Group with real-time video-call
+  teleconsultation (Zego), hospital map navigation, service booking, educational
+  mini-games (Flame), and offline caching (Hive + dio_cache_interceptor).
 cover: ../../assets/projects/sg-sehat.png
 tech:
   - Flutter
   - Dart
   - GetX
-  - Zego SDK
+  - Dio
+  - Hive
+  - dio_cache_interceptor
+  - Zego UIKit Prebuilt Call
   - Google Maps
+  - Firebase
   - OneSignal
   - Flame
 links:

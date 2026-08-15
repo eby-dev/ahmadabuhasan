@@ -14,11 +14,7 @@
   items:
     - MVP
     - MVVM
-    - Clean Architecture
-    - Modularization
     - Dagger 2
-    - Hilt
-    - Koin
 
 - id: async
   order: 3
@@ -53,6 +49,8 @@
     - Dart
     - BLoC
     - GetX
+    - Syncfusion PDF Viewer
+    - Flame
 
 - id: media-ml
   order: 7
@@ -61,24 +59,25 @@
     - CameraX
     - ML Kit
     - TF Lite
-    - ExoPlayer
+    - Zego UIKit
 
-- id: testing
+- id: security
   order: 8
-  name: Testing
+  name: Security
   items:
-    - JUnit
-    - Mockito
+    - Biometric
+    - Rootbeer
+    - FreeRasp
+    - TrueTime
 
 - id: delivery
   order: 9
   name: Delivery
   items:
     - Fastlane
-    - CI/CD
     - GitHub Actions
+    - GitLab CI
     - Play Store
-    - App Store
 
 - id: tools
   order: 10
@@ -86,4 +85,5 @@
   items:
     - Git
     - Android Studio
+    - Figma
     - Postman

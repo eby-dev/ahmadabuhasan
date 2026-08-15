@@ -10,17 +10,21 @@ stack:
   - Java
   - MVP
   - Dagger 2
+  - Coroutines
+  - Flow
   - RxJava
+  - OkHttp
+  - Room
+  - GreenDAO
   - Firebase
-  - CameraX
-  - ML Kit
+  - Google Maps
+  - FreeRasp
   - Fastlane
-  - Modularization
+  - GitLab CI
 summary: >-
-  Building and maintaining the Brighton Android app — a full-scale real estate
-  platform with 50+ feature screens (map view, open house, booking, mortgage
-  calculator, e-ticketing, digital contract, sales reporting, in-app training).
-  MVP + Dagger 2, 11-module modularization, RxJava 2/3, Firebase, CameraX + ML
-  Kit, Fastlane CI/CD.
+  Contributing to the Brighton Android production app (MVP + Dagger 2)
+  already live on Play Store. Focused on incremental Java → Kotlin migration,
+  ButterKnife → ViewBinding refactor, edge-to-edge Android 15+ support, API
+  gateway endpoint migration, and production crash/NPE fixing with Crashlytics.
 featured: true
 ---

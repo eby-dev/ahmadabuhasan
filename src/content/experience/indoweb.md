@@ -6,14 +6,23 @@ type: Internship
 startDate: 2022-09-01
 endDate: 2023-04-30
 stack:
-  - Android
+  - Kotlin
   - MVVM
+  - ViewBinding
+  - Retrofit
+  - RxJava
+  - Google Maps
+  - TrueTime
   - Flutter
   - BLoC
   - GetX
+  - PHP
+  - MySQL
 summary: >-
-  Built 6 apps including ePesantren (Islamic boarding school management with
-  GPS check-in, TrueTime anti-cheat) and AdminSekolah (attendance + parent
-  app). 2,000+ combined downloads on Google Play Store.
+  Built Android employee-attendance apps for the ePesantren and AdminSekolah
+  ecosystems (Kotlin, MVVM/ViewBinding, Retrofit + RxJava) with GPS check-in,
+  selfie verification, and TrueTime server-time validation. Also built the
+  AdminSekolah parent Flutter app (GetX + Syncfusion PDF Viewer) and developed
+  the supporting REST APIs in PHP Native + MySQL.
 featured: true
 ---

@@ -3,16 +3,24 @@ title: e-Pakon SiGanteng
 category: Android Native
 sector: Government
 description: >-
-  Government employee attendance app with TF Lite face recognition, CameraX,
-  Biometric auth, and Room. Featured in Radar Madura.
+  Government employee attendance app for Pemkab Pamekasan with TF Lite face
+  recognition, CameraX, GPS logging, biometric authentication, root detection
+  (Rootbeer), and automatic in-app update. Featured in Radar Madura.
 cover: ../../assets/projects/e-pakon-siganteng.png
 tech:
   - Kotlin
-  - TF Lite
+  - MVVM
+  - Coroutines
   - CameraX
   - ML Kit
-  - Biometric
+  - TF Lite
   - Room
+  - Retrofit
+  - Firebase
+  - Biometric
+  - Rootbeer
+  - In-App Update
+  - OneSignal
 links:
   playStore: https://play.google.com/store/apps/details?id=com.natusi.bkpsdm
 status: shipped
