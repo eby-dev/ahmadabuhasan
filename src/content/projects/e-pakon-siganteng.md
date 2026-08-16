@@ -4,8 +4,8 @@ category: Android Native
 sector: Government
 description: >-
   Government employee attendance app for Pemkab Pamekasan with TF Lite face
-  recognition, CameraX, GPS logging, biometric authentication, root detection
-  (Rootbeer), and automatic in-app update. Featured in Radar Madura.
+  recognition, CameraX, biometric auth, and root detection (Rootbeer). Featured
+  in Radar Madura.
 cover: ../../assets/projects/e-pakon-siganteng.png
 tech:
   - Kotlin

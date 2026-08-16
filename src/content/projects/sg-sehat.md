@@ -3,9 +3,9 @@ title: SG Sehat
 category: Flutter
 sector: Healthcare
 description: >-
-  Hospital super-app for Cipta Nirmala Group with real-time video-call
-  teleconsultation (Zego), hospital map navigation, service booking, educational
-  mini-games (Flame), and offline caching (Hive + dio_cache_interceptor).
+  Hospital super-app for Cipta Nirmala Group with real-time teleconsultation
+  (Zego), hospital map, service booking, educational mini-games (Flame), and
+  offline caching.
 cover: ../../assets/projects/sg-sehat.png
 tech:
   - Flutter

@@ -5,8 +5,7 @@ sector: Education
 description: >-
   Employee-attendance Android app for schools — GPS check-in, selfie
   verification, and TrueTime server-time validation to prevent device-clock
-  manipulation. Part of the AdminSekolah ecosystem serving school clients of
-  Indoweb.
+  manipulation.
 cover: ../../assets/projects/admin-sekolah.png
 tech:
   - Kotlin
