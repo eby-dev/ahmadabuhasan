@@ -46,17 +46,35 @@ This step is **required** and can only be done in the dashboard. `public/_redire
 cannot do it: Cloudflare Pages matches only the URL *path* in the source column, so a
 `https://www.…/*` source never matches. There is no in-repo fallback for host redirects.
 
-**Rules → Redirect Rules** (Websites → ahmadabuhasan.com → Rules → Redirect Rules → Create rule):
+Click the domain name in the dashboard to enter the zone (the account-level
+**Domains → Registrations** section is the registrar, and has no Rules), then go to
+**Rules → Redirect Rules** and use the built-in **"Redirect from WWW to root"** template
+(Create rule → Rule templates). It needs no edits:
 
-- If → Custom filter expression: `http.host eq "www.ahmadabuhasan.com"`
-- Then → **Dynamic** redirect, expression: `concat("https://ahmadabuhasan.com", http.request.uri.path)`
-- Status: `301`, with *Preserve query string* enabled
+- Match: Wildcard pattern, Request URL `https://www.*`
+- Then: Target URL `https://${1}`, status `301`
+- Tick *Preserve query string* — the template leaves it off
 
-Use a Dynamic redirect, not Static: a static target cannot carry the request path over,
-so every `www` URL would collapse onto the apex home page.
+`${1}` captures `host + path`, so the path carries over. Do not hand-write a static
+target: it would collapse every `www` URL onto the apex home page.
 
-Verify with `curl -sSI https://www.ahmadabuhasan.com/` — expect `301` plus
-`Location: https://ahmadabuhasan.com/`. A `200` means the rule is missing or disabled.
+On deploy, Cloudflare may warn "This rule may not apply to your traffic — DNS may not be
+proxying www". If `nslookup www.ahmadabuhasan.com` returns Cloudflare IPs (104.21.x /
+172.67.x), the warning is a false positive; choose *Ignore and deploy rule anyway*.
+
+Verify:
+
+```bash
+curl -sSI https://www.ahmadabuhasan.com/about/ | grep -iE '^HTTP|^location'
+# HTTP/1.1 301 Moved Permanently
+# Location: https://ahmadabuhasan.com/about/
+```
+
+A `200`, or a `Location` that drops the path, means the rule is missing or misconfigured.
+
+Known gap: `http://www` (plain HTTP) redirects to `https://www` first, then to the apex —
+two hops. Harmless, and Always Use HTTPS runs before Redirect Rules, so it cannot be
+flattened from here.
 
 ## 4. SSL / TLS
 
