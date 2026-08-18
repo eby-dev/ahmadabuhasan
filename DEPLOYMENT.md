@@ -43,7 +43,7 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
 ## 3. Force `www` → apex
 
 This step is **required** and can only be done in the dashboard. `public/_redirects`
-cannot do it: Cloudflare Pages matches only the URL *path* in the source column, so a
+cannot do it: Cloudflare Pages matches only the URL _path_ in the source column, so a
 `https://www.…/*` source never matches. There is no in-repo fallback for host redirects.
 
 Click the domain name in the dashboard to enter the zone (the account-level
@@ -53,14 +53,14 @@ Click the domain name in the dashboard to enter the zone (the account-level
 
 - Match: Wildcard pattern, Request URL `https://www.*`
 - Then: Target URL `https://${1}`, status `301`
-- Tick *Preserve query string* — the template leaves it off
+- Tick _Preserve query string_ — the template leaves it off
 
 `${1}` captures `host + path`, so the path carries over. Do not hand-write a static
 target: it would collapse every `www` URL onto the apex home page.
 
 On deploy, Cloudflare may warn "This rule may not apply to your traffic — DNS may not be
 proxying www". If `nslookup www.ahmadabuhasan.com` returns Cloudflare IPs (104.21.x /
-172.67.x), the warning is a false positive; choose *Ignore and deploy rule anyway*.
+172.67.x), the warning is a false positive; choose _Ignore and deploy rule anyway_.
 
 Verify:
 
