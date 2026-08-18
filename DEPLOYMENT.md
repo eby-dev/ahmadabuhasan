@@ -42,15 +42,21 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
 
 ## 3. Force `www` → apex
 
-Two options; pick one (both work — Rule is faster and more explicit).
+This step is **required** and can only be done in the dashboard. `public/_redirects`
+cannot do it: Cloudflare Pages matches only the URL *path* in the source column, so a
+`https://www.…/*` source never matches. There is no in-repo fallback for host redirects.
 
-**Option A (recommended) — Rules → Redirect Rules** (Websites → ahmadabuhasan.com → Rules → Redirect Rules → Create rule):
+**Rules → Redirect Rules** (Websites → ahmadabuhasan.com → Rules → Redirect Rules → Create rule):
 
-- When: Hostname equals `www.ahmadabuhasan.com`
-- Then: Static redirect → `https://ahmadabuhasan.com/${1}`
-- Status: `301`
+- If → Custom filter expression: `http.host eq "www.ahmadabuhasan.com"`
+- Then → **Dynamic** redirect, expression: `concat("https://ahmadabuhasan.com", http.request.uri.path)`
+- Status: `301`, with *Preserve query string* enabled
 
-**Option B — rely on `public/_redirects`** in the repo. The last line of that file already covers this case as a safety net.
+Use a Dynamic redirect, not Static: a static target cannot carry the request path over,
+so every `www` URL would collapse onto the apex home page.
+
+Verify with `curl -sSI https://www.ahmadabuhasan.com/` — expect `301` plus
+`Location: https://ahmadabuhasan.com/`. A `200` means the rule is missing or disabled.
 
 ## 4. SSL / TLS
 
@@ -139,7 +145,9 @@ Dashboard → Pages project → **Deployments** → find a healthy previous buil
 
 ### Redirects update
 
-Edit `public/_redirects`, commit, push. Cloudflare Pages picks it up on the next deploy. Prefer Dashboard **Rules → Redirect Rules** for hostname-level redirects (they run at edge before Pages routing).
+Edit `public/_redirects`, commit, push. Cloudflare Pages picks it up on the next deploy.
+Path-only redirects belong here. Hostname-level redirects **must** use Dashboard
+**Rules → Redirect Rules** — `_redirects` cannot match on host at all (see step 3).
 
 ### Rotating the Cloudflare Analytics token
 

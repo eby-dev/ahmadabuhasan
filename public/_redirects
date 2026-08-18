@@ -8,5 +8,10 @@
 /index.html          /                301
 /index.php           /                301
 
-# www -> apex fallback (the dashboard Rules entry is the primary; this is a safety net)
-https://www.ahmadabuhasan.com/*  https://ahmadabuhasan.com/:splat  301!
+# Do NOT add a www -> apex rule here. Cloudflare Pages matches only the PATH in
+# the source column, so an absolute `https://www.example.com/*` source is read as
+# a path, never matches, and is dropped silently (verified: www served 200, not 301).
+# Host-level redirects must live in the Cloudflare dashboard:
+#   Rules -> Redirect Rules, if `http.host eq "www.ahmadabuhasan.com"`
+#   -> dynamic 301 to concat("https://ahmadabuhasan.com", http.request.uri.path)
+# That dashboard rule is the ONLY thing enforcing www -> apex. See DEPLOYMENT.md.
