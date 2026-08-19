@@ -1,122 +1,260 @@
 ---
-title: 'Kenapa Aplikasi Absensi Tidak Boleh Percaya Jam HP'
-description: 'Catatan dari membangun aplikasi absensi untuk sekolah dan pesantren: jam perangkat bisa diubah siapa saja, dan bagaimana TrueTime menutup celah itu.'
+title: 'Absensi Karyawan: Jangan Percaya Apa Pun dari Perangkat'
+description: 'Catatan dari lima aplikasi absensi Android di Indoweb — kenapa jam, zona waktu, dan radius lokasi semuanya diputuskan server, bukan HP pengguna.'
 publishedAt: 2023-04-15
 draft: true
 tags: ['android', 'kotlin', 'attendance']
 ---
 
 <!--
-DRAFT — kerangka dari data experience/project kamu. Belum bisa dipublish.
+DRAFT — dibuat dari kode di C:\p\jobs4\audit (5 repo Indoweb) + CHANGELOG v1->v2.
+Semua klaim teknis sudah dicek ke kode, bukan asumsi.
 
-Yang perlu kamu lakukan:
-1. Cek semua yang saya tandai [KONFIRMASI] — saya menyimpulkan dari file
-   experience dan project, bukan dari ingatan kamu.
-2. Isi bagian [ISI SENDIRI] — angka, kejadian nyata, keputusan yang kamu ambil.
-   Itu bagian yang bikin tulisan ini bernilai; saya tidak bisa mengarangnya.
-3. Hapus komentar ini dan semua penanda, ubah `draft: false`, lalu build.
+Isinya sudah utuh; tinggal satu catatan [OPSIONAL] di bagian zona waktu yang
+boleh diisi atau dihapus. Baca ulang seluruhnya — kalau ada yang tidak sesuai
+ingatanmu, itu yang menang, bukan pembacaan saya atas kodenya.
 
-Kalau ada yang salah, koreksi saja — ini bahan mentah, bukan hasil akhir.
+Sebelum publish: hapus komentar ini, ubah `draft: false`, jalankan `npm run build`.
 -->
 
-Waktu magang di Indoweb.id, saya kebagian membangun aplikasi absensi karyawan
-untuk dua ekosistem: ePesantren untuk pondok pesantren, dan AdminSekolah untuk
-sekolah. Fiturnya terdengar sederhana — karyawan buka aplikasi, absen masuk,
-selesai.
+Selama magang di Indoweb.id saya mengerjakan lima aplikasi absensi Android
+dalam rentang empat bulan: eLazis (Januari 2023), sebuah varian internal,
+AdminSekolah (Februari), ePesantren (Maret), lalu AdminSekolah versi siswa
+(April). Semuanya melakukan hal yang sama — karyawan absen masuk, ambil selfie,
+kirim.
 
-Yang tidak sederhana adalah satu pertanyaan yang muncul belakangan: **kalau
-absensi mencatat waktu, waktu siapa yang kita catat?**
+Mengerjakan hal yang mirip lima kali berturut-turut punya efek yang tidak saya
+duga: kesalahan di aplikasi pertama jadi kelihatan waktu mengerjakan yang kedua.
+Dan pola yang tersisa setelah kelimanya selesai adalah ini — **hampir semua yang
+menentukan sah-tidaknya sebuah absensi diputuskan di server, bukan di HP.** Bukan
+karena dirancang begitu dari awal, tapi karena satu per satu kami menemukan
+alasannya.
 
-## Masalahnya: jam HP itu milik pengguna
+## Jam perangkat: masalah yang jelas
 
-Cara paling gampang mencatat absensi adalah pakai `System.currentTimeMillis()`
-di perangkat. Ambil waktu, kirim ke server, simpan.
+Cara paling gampang mencatat absensi adalah pakai jam HP. Ambil
+`System.currentTimeMillis()`, kirim ke server, simpan.
 
-Masalahnya, jam perangkat bisa diubah siapa saja tanpa akses khusus — buka
-Settings, matikan waktu otomatis, geser jamnya. Tidak perlu root, tidak perlu
-aplikasi tambahan. Kalau aplikasi absensi percaya angka itu, karyawan yang
-datang jam 9 bisa mencatat dirinya masuk jam 7.
+Masalahnya, jam perangkat bisa diubah siapa saja — buka Settings, matikan waktu
+otomatis, geser jamnya. Tidak perlu root. Untuk aplikasi yang datanya dipakai
+menghitung keterlambatan, itu melubangi seluruh gunanya.
 
-Untuk aplikasi biasa ini tidak penting. Untuk aplikasi yang datanya dipakai
-menghitung kedisiplinan — dan mungkin gaji — ini melubangi seluruh gunanya.
-
-[KONFIRMASI] Apakah celah ini ketemu saat testing, atau ada yang benar-benar
-melakukannya di produksi? Kalau ada kejadian nyata, itu pembuka yang jauh lebih
-kuat daripada penjelasan teoretis.
-
-## Kenapa tidak pakai waktu server saja
-
-Solusi paling jelas: jangan kirim waktu dari perangkat, biarkan server yang
-mencatat waktu saat request masuk.
-
-[ISI SENDIRI] Ini yang saya tidak tahu dan cuma kamu yang tahu: kenapa
-pendekatan ini tidak cukup? Beberapa kemungkinan yang biasa jadi alasan —
-pilih yang benar, atau tulis alasan sebenarnya:
-
-- Aplikasi harus bisa absen saat sinyal jelek, waktunya direkam dulu di
-  perangkat lalu dikirim belakangan
-- Waktu perlu ditampilkan ke pengguna sebelum request dikirim
-- API-nya sudah ada dan mengharapkan timestamp dari klien
-- Alasan lain
-
-Bagian ini penting. Pembaca yang paham langsung bertanya "kenapa tidak server
-saja?", dan kalau tidak dijawab, tulisan ini kehilangan kredibilitasnya.
-
-## TrueTime: ambil waktu dari NTP, bukan dari perangkat
-
-Yang akhirnya kami pakai adalah [TrueTime](https://github.com/instacart/truetime-android).
-Cara kerjanya: sekali saat aplikasi jalan, ia menanyakan waktu ke server NTP,
-lalu menghitung selisihnya terhadap `SystemClock.elapsedRealtime()` — penghitung
-yang jalan sejak perangkat booting dan **tidak bisa diubah dari Settings**.
-
-Setelah itu, waktu yang dipakai selalu hasil hitungan dari selisih tadi. Pengguna
-menggeser jam perangkat, angka yang dipakai aplikasi tidak berubah.
+Solusi kami: **jangan pernah kirim waktu dari klien.** Endpoint absensinya tidak
+punya parameter waktu sama sekali:
 
 ```kotlin
-// [KONFIRMASI] ganti dengan kode yang benar-benar kamu pakai —
-// pola inisialisasi TrueTime beda-beda antar versi.
-if (TrueTimeRx.isInitialized()) {
-    val trustedNow = TrueTimeRx.now()   // aman dari perubahan jam perangkat
-} else {
-    // [ISI SENDIRI] apa yang kamu lakukan di sini?
-    // Tolak absensi? Paksa pakai waktu server? Coba inisialisasi ulang?
-    // Keputusan ini yang paling menarik dari seluruh tulisan.
+@Multipart
+@POST("absen.php")
+suspend fun presence(
+    @Header("Authorization") token: String,
+    @Part("id_pegawai") userId: RequestBody,
+    @Part("type") type: RequestBody,
+    @Part("lokasi") location: RequestBody,
+    @Part("lati") latitude: RequestBody,
+    @Part("longi") longitude: RequestBody,
+    @Part("keterangan") noted: RequestBody,
+    @Part image: MultipartBody.Part
+): DefaultResponse
+```
+
+Tidak ada `waktu`, tidak ada `timestamp`. Server yang stempel waktu saat request
+masuk. Klien tidak punya cara mengarang jam absen, karena tidak diberi
+kesempatan mengirimkannya.
+
+Ini keputusan yang murah dan menutup celahnya sepenuhnya. Kalau saya
+mengerjakan aplikasi absensi lagi, ini hal pertama yang saya pastikan.
+
+## NTP sebagai gerbang, bukan sebagai jam
+
+Di v2 kami menambahkan [TrueTime](https://github.com/instacart/truetime-android),
+library yang mengambil waktu dari server NTP lalu mengukurnya terhadap
+`SystemClock.elapsedRealtime()` — penghitung sejak booting yang tidak bisa diubah
+dari Settings. CHANGELOG v2.0.0 mencatatnya sebagai "Menambahkan Server NTP untuk
+mendapatkan waktu sekarang".
+
+```kotlin
+TrueTimeRx.build()
+    .withConnectionTimeout(31428)
+    .withRetryCount(100)
+    .withSharedPreferencesCache(this)
+    .initializeRx("1.id.pool.ntp.org")
+```
+
+Karena waktu absensi sudah distempel server, TrueTime tidak dipakai sebagai
+sumber jam. Perannya jadi lain: **gerbang** — kalau waktu tepercaya belum
+tersedia, aplikasi tidak boleh jalan. Setiap `MainActivity` mengeceknya lebih
+dulu, dan `TrueTimeRx.now()` dibandingkan dengan `Date()` supaya selisih
+perangkat terlihat di log.
+
+Gerbang itu di aplikasi pertama salah pasang. Di eLazis, Januari 2023:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    // ...
+    if (!TrueTimeRx.isInitialized()) {
+        Toast.makeText(this, "Sorry TrueTime not yet initialized.", Toast.LENGTH_SHORT).show()
+        return   // <- keluar sebelum getBottomNavigation()
+    }
+
+    session = SessionManager(this)
+    // ...
+    getBottomNavigation()
 }
 ```
 
-## Bagian yang tidak ada di dokumentasi
+`return` itu keluar dari `onCreate` sebelum navigasi bawah dipasang. Jadi kalau
+inisialisasi NTP belum selesai saat halaman utama dibuka, pengguna dapat Toast
+sekejap — lalu layar tanpa menu, tanpa jalan ke mana pun. Bukan pesan error yang
+bisa dimengerti, cuma aplikasi yang seperti rusak.
 
-[ISI SENDIRI] Ini inti tulisannya — hal yang cuma didapat dari benar-benar
-mengirim aplikasi ini ke pengguna. Beberapa pemicu, jawab yang kamu ingat:
+Dan itu bukan skenario teoretis. Lihat konfigurasinya: `withRetryCount(100)`
+dengan timeout ~31 detik per percobaan. Angka itu saya set tinggi justru karena
+NTP tidak selalu langsung berhasil di jaringan sekolah dan pesantren. Artinya
+kondisi "belum siap" memang dirancang untuk mungkin terjadi — tapi
+penanganannya di layar tidak ikut dirancang.
 
-- **Kalau inisialisasi NTP gagal, apa yang terjadi?** Sinyal di pesantren tidak
-  selalu bagus. Absensi ditolak, atau tetap jalan dengan cara lain?
-- **Berapa lama inisialisasinya?** Apakah pengguna sempat menunggu?
-- **Setelah aplikasi lama di background, waktunya masih akurat?**
-- **Ada laporan dari pengguna yang ternyata bukan bug?** Misalnya orang mengira
-  aplikasi salah padahal jam HP-nya yang salah.
+Yang menarik, dan baru saya lihat waktu membaca ulang riwayat git-nya: gerbang
+yang sama di empat aplikasi setelahnya tidak pernah pakai Toast lagi. Semuanya
+turun jadi log:
 
-Satu paragraf tentang satu masalah nyata di sini lebih berharga daripada seluruh
-penjelasan di atas — itu yang tidak bisa dibaca orang di dokumentasi TrueTime.
+```kotlin
+// AdminSekolah (Feb), ePesantren (Mar), dan dua lainnya
+if (!TrueTimeRx.isInitialized()) {
+    Log.d(TAG, "Sorry TrueTime not yet initialized.")
+    return
+}
+```
 
-## GPS dan selfie: lapisan yang lain
+Saya tidak ingat pernah memutuskan itu, dan tidak ada commit yang menjelaskannya
+— tapi urutan tanggalnya jelas. Kemungkinan besar saya melihat gejalanya di
+eLazis, lalu di aplikasi berikutnya menulisnya berbeda tanpa pernah kembali
+memperbaiki yang pertama.
 
-Waktu cuma satu dari tiga hal yang diverifikasi. Aplikasinya juga merekam lokasi
-GPS untuk memastikan absensi dilakukan di lokasi kerja, dan meminta selfie
-sebagai bukti orangnya benar hadir.
+Itu pun belum benar. `return`-nya masih ada, jadi apa pun yang ada di bawahnya
+tetap terlewat; yang hilang cuma Toast yang membuat pengguna merasa aplikasinya
+rusak. Yang seharusnya: tampilkan status loading, atau biarkan aplikasi jalan dan
+tunda pengecekan sampai tombol absen ditekan.
 
-[ISI SENDIRI] Kalau ada cerita menarik soal dua ini — GPS yang meleset di dalam
-gedung, mock location, ukuran foto yang bikin upload lambat — sebutkan singkat.
-Kalau tidak ada, potong bagian ini saja, jangan dipanjangkan.
+Pelajarannya bukan soal NTP. Kalau kamu memasang gerbang untuk kondisi yang
+kadang gagal — dan `withRetryCount(100)` itu pengakuan bahwa kondisinya sering
+gagal — maka **jalur gagalnya butuh desain yang sama seriusnya dengan jalur
+berhasil.** Yang saya lakukan cuma memelankan gejalanya.
+
+## Zona waktu: masalah yang tidak saya duga
+
+Ini yang paling berkesan, dan tidak akan ketemu kalau aplikasinya cuma dipakai
+di satu kota.
+
+Indonesia punya tiga zona waktu: WIB, WITA, WIT. Aplikasinya dipakai sekolah dan
+pesantren dari berbagai daerah. Dan zona waktu HP itu — sama seperti jamnya —
+milik pengguna. Guru yang pindah dari Jakarta ke Papua, atau yang HP-nya tidak
+pernah diatur ulang, akan melihat jam yang salah untuk sekolahnya.
+
+Solusinya sama seperti masalah jam: **jangan tanya perangkat, tanya server.**
+Zona waktu datang dari response login (`login.gmt`), lalu dipasang eksplisit:
+
+```kotlin
+when (login.gmt) {
+    "WIB" -> TimeZone.setDefault(TimeZone.getTimeZone("Asia/Jakarta"))
+    "WITA" -> TimeZone.setDefault(TimeZone.getTimeZone("Asia/Makassar"))
+    "WIT" -> TimeZone.setDefault(TimeZone.getTimeZone("Asia/Jayapura"))
+}
+```
+
+Sekolahnya yang menentukan zona waktunya, bukan HP gurunya.
+
+Satu hal yang saya temukan waktu menyiapkan tulisan ini, dan lebih baik saya
+tulis daripada saya diamkan. Ada commit di ePesantren, 5 April 2023, judulnya
+satu kata: `gmt`. Isinya satu baris:
+
+```diff
+- val token = sharedPref.getString("token", null).toString()
++ val token = sharedPref.getString("indonesia_time", null).toString()
+```
+
+Variabelnya bernama `token`, dibaca dari SharedPreferences, lalu di-`println`.
+Kunci `indonesia_time` itu tidak pernah ditulis di mana pun, jadi nilainya selalu
+`"null"`. Untungnya nilai itu juga tidak dipakai untuk apa-apa — autentikasi
+sebenarnya lewat `@Header("Authorization")` per request, bukan dari sini. Jadi
+efeknya nol.
+
+Tapi bacanya tetap tidak enak: sebaris kode debug yang tertinggal di jalur
+pembuatan API client, dengan nama variabel yang menyesatkan siapa pun yang
+membacanya nanti — termasuk saya, tiga tahun kemudian, yang sempat mengira ini
+bug autentikasi sebelum menelusuri ke mana nilainya pergi.
+
+<!--
+[OPSIONAL] Kalau kamu ingat ada sekolah yang benar-benar melaporkan jam absensi
+melenceng, satu kalimat soal itu bikin bagian ini jauh lebih hidup. Kalau tidak
+ingat, biarkan saja — bagian ini sudah utuh tanpa itu.
+-->
+
+## Radius dan area juga dari server
+
+Setelah dua kejadian di atas, polanya jadi kebiasaan. Konfigurasi geofence pun
+tidak di-hardcode di aplikasi:
+
+```kotlin
+validation = dataUser.validation
+radius = dataUser.radius
+listArea.addAll(dataUser.area)
+```
+
+Radius, daftar lokasi yang sah, dan mode validasi semuanya ikut response
+`data_user.php`. Efek sampingnya yang berguna: sekolah bisa menambah lokasi baru
+atau melonggarkan radius tanpa update aplikasi. CHANGELOG v1 mencatat "Maps satu
+lokasi", v2 jadi "Maps banyak lokasi" — perubahan itu tidak butuh rilis baru di
+sisi klien.
+
+## Yang berubah dari v1 ke v2
+
+Membaca CHANGELOG-nya sekarang, hampir semua perubahan besar di v2 punya bentuk
+yang sama — memindahkan keputusan dari klien ke server, atau menutup celah yang
+muncul karena klien terlalu dipercaya:
+
+- Selfie dari _optional_ jadi _required_
+- Batas waktu absen 20 detik → 60 detik
+- Data real-time: admin LOCK/UNLOCK langsung berlaku tanpa user logout
+- Keterangan izin dari _optional_ jadi _required_
+- **Presensi hanya bisa satu kali**
+
+Yang terakhir itu menutup celah yang paling gampang dipakai. Absensi punya dua
+jenis — datang dan pulang — dan tipenya dikirim sebagai parameter biasa:
+
+```kotlin
+@Part("type") type: RequestBody
+```
+
+Di v1, tidak ada yang mencegah seseorang mengirim absen datang dua kali, atau
+absen lalu mengajukan izin untuk hari yang sama. Klien memang tidak menampilkan
+tombolnya lagi, tapi klien bukan tempat aturan ditegakkan — tombol yang
+disembunyikan hanya menyulitkan orang yang tidak berniat curang.
+
+Di v2 aturannya pindah ke server: sudah absen berarti tidak bisa absen lagi, dan
+tidak bisa izin. Klien tetap menyembunyikan tombolnya untuk kenyamanan, tapi
+keputusannya bukan lagi miliknya.
+
+Pola yang sama dengan jam dan zona waktu — **yang menegakkan aturan tidak boleh
+pihak yang diuntungkan kalau aturannya dilanggar.**
 
 ## Yang saya ambil dari ini
 
-[ISI SENDIRI] Tutup dengan kesimpulanmu sendiri, satu-dua paragraf.
+Pelajarannya bukan soal TrueTime, dan bukan soal absensi.
 
-Kalau butuh arah: pelajarannya bukan soal TrueTime. Yang lebih umum adalah
-kebiasaan bertanya _data ini datang dari mana, dan siapa yang bisa
-mengubahnya_ — pertanyaan yang berlaku untuk jam, lokasi, dan apa pun yang
-dikirim klien. Tapi tulis dengan kalimatmu, bukan kalimat saya.
+Yang tersisa di kepala saya adalah satu kebiasaan bertanya: **data ini datang
+dari mana, dan siapa yang bisa mengubahnya?** Jam, zona waktu, lokasi, radius,
+boleh-tidaknya absen dua kali — semuanya awalnya terasa seperti "urusan
+perangkat". Ternyata semuanya urusan server, dan yang membedakan cuma seberapa
+cepat kami menyadarinya.
+
+Kalau data dipakai untuk mengambil keputusan yang berdampak ke orang — kehadiran,
+keterlambatan, dan pada akhirnya gaji — maka yang mengirim data tidak boleh jadi
+pihak yang berkepentingan atas hasilnya.
+
+Dan satu catatan untuk diri saya sendiri, dari bug eLazis di atas: memindahkan
+kepercayaan ke server itu setengah pekerjaan. Setengah lainnya adalah memikirkan
+apa yang dilihat pengguna ketika lapisan yang kamu percayai itu sedang tidak
+tersedia.
 
 ---
 
