@@ -1,17 +1,10 @@
 ---
-title: 'Ketika `null` Berubah Jadi Kata "null"'
+title: 'Ketika null Berubah Jadi Kata "null"'
 description: 'Satu jebakan Kotlin yang muncul saat memigrasi aplikasi Android lama dari Java — dan kenapa null-safety tidak menyelamatkanmu di batas jaringan.'
 publishedAt: 2026-08-18
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'migration']
 ---
-
-<!--
-DRAFT — contoh kode di sini sengaja dibuat generik (User/Profile), bukan kode
-klien. Pengalamannya nyata, kodenya ilustrasi.
-
-Sebelum publish: hapus komentar ini, ubah `draft: false`, `npm run build`.
--->
 
 Hampir dua tahun terakhir saya mengerjakan satu aplikasi Android yang sudah lama
 jalan di produksi — basisnya Java, arsitekturnya MVP, dipakai ribuan orang setiap
