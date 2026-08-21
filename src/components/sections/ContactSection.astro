@@ -223,13 +223,13 @@ const formAction = `https://formspree.io/f/${SITE.formspreeId}`;
         if (response.ok) {
           form.reset();
           status.dataset.state = 'success';
-          status.textContent = 'Thanks — your message was sent. I will reply soon.';
+          status.textContent = 'Thanks — your message was sent. I read every one.';
         } else {
           const body = await response.json().catch(() => null);
           const message =
             body && Array.isArray(body.errors) && body.errors[0]?.message
               ? body.errors[0].message
-              : 'Something went wrong. Please try again or email directly.';
+              : 'Something went wrong. Please try again, or reach me on LinkedIn.';
           status.dataset.state = 'error';
           status.textContent = message;
         }
