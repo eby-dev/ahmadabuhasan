@@ -1,39 +1,151 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Container from '@/components/layout/Container.astro';
 import Button from '@/components/ui/Button.astro';
 import SocialLinks from '@/components/ui/SocialLinks.astro';
 import { SITE } from '@/config/site';
+
+/*
+ * Proof figures are derived from the content collections, never hard-coded —
+ * adding a project or a sector updates the bar on the next build. Download
+ * counts are deliberately absent: several apps kept growing after the
+ * engagement ended, so those numbers are not Ahmad's to claim.
+ */
+const projects = await getCollection('projects');
+const appCount = projects.length;
+const sectorCount = new Set(projects.map((p) => p.data.sector)).size;
+
+const experience = await getCollection('experience');
+const firstStart = experience.reduce<Date | null>((earliest, entry) => {
+  const start = entry.data.startDate;
+  return earliest === null || start < earliest ? start : earliest;
+}, null);
+const yearsShipping = firstStart
+  ? Math.floor((Date.now() - firstStart.getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+  : null;
+
+/* The hero device shows the highest-ordered featured project that has a cover. */
+const heroProject = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity))[0];
 ---
 
 <section class="hero" aria-labelledby="hero-heading">
-  <Container narrow>
-    <p class="greeting">Hello, I'm</p>
-    <h1 id="hero-heading" class="name">{SITE.name}</h1>
-    <p class="role">{SITE.role}</p>
+  <Container>
+    <div class="hero-grid">
+      <div class="intro">
+        <p class="availability">
+          <span class="dot" aria-hidden="true"></span>
+          Open to opportunities
+        </p>
 
-    <div class="hero-socials">
-      <SocialLinks size="sm" />
+        <p class="greeting">Hello, I'm</p>
+        <h1 id="hero-heading" class="name">{SITE.name}</h1>
+        <p class="role">{SITE.role}</p>
+        <p class="subtitle">{SITE.subtitle}</p>
+
+        <div class="cta-group">
+          <Button href="/projects" variant="primary" size="md">View Projects</Button>
+          <Button href="/contact" variant="secondary" size="md">Contact Me</Button>
+        </div>
+
+        <div class="hero-socials">
+          <SocialLinks size="sm" />
+        </div>
+      </div>
+
+      {
+        heroProject && (
+          <div class="device-wrap" aria-hidden="true">
+            <div class="glow" />
+            <div class="device">
+              <Image
+                src={heroProject.data.cover}
+                alt=""
+                widths={[200, 400]}
+                sizes="180px"
+                loading="eager"
+              />
+            </div>
+          </div>
+        )
+      }
     </div>
 
-    <p class="subtitle">{SITE.subtitle}</p>
-
-    <div class="cta-group">
-      <Button href="/projects" variant="primary" size="md"> View Projects </Button>
-      <Button href="/contact" variant="secondary" size="md"> Contact Me </Button>
-    </div>
+    <dl class="proof">
+      <div class="proof-item">
+        <dt class="proof-value">{appCount}</dt>
+        <dd class="proof-label">Apps on Play Store</dd>
+      </div>
+      {
+        yearsShipping !== null && (
+          <div class="proof-item">
+            <dt class="proof-value">{yearsShipping}+</dt>
+            <dd class="proof-label">Years shipping</dd>
+          </div>
+        )
+      }
+      <div class="proof-item">
+        <dt class="proof-value">{sectorCount}</dt>
+        <dd class="proof-label">Sectors delivered</dd>
+      </div>
+      <div class="proof-item">
+        <dt class="proof-value proof-value-text">Radar Madura</dt>
+        <dd class="proof-label">Press feature</dd>
+      </div>
+    </dl>
   </Container>
 </section>
 
 <style>
+  /* Top padding stays small: #main and the inset header already supply the gap. */
   .hero {
-    padding-block: var(--space-24) var(--space-16);
+    padding-block: 0 var(--space-8);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-8);
+    align-items: center;
+    padding: var(--space-10);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-5);
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-accent);
+    background-color: var(--color-accent-soft-bg);
+    border: 1px solid var(--color-accent-soft-border);
+    border-radius: var(--radius-full);
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
   }
 
   .greeting {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-base);
     color: var(--color-text-muted);
     margin: 0 0 var(--space-2);
-    font-weight: var(--fw-regular);
   }
 
   .name {
@@ -52,17 +164,12 @@ import { SITE } from '@/config/site';
     margin: var(--space-3) 0 var(--space-4);
   }
 
-  .hero-socials {
-    margin: 0 0 var(--space-8);
-    /* Nudge icons flush-left with the hero text baseline */
-    margin-left: calc(var(--space-2) * -1);
-  }
-
   .subtitle {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-base);
     color: var(--color-text-muted);
-    max-width: 55ch;
-    margin: 0 0 var(--space-8);
+    line-height: var(--lh-normal);
+    max-width: 46ch;
+    margin: 0 0 var(--space-6);
   }
 
   .cta-group {
@@ -71,9 +178,136 @@ import { SITE } from '@/config/site';
     flex-wrap: wrap;
   }
 
+  .hero-socials {
+    margin: var(--space-6) 0 0;
+    /* Nudge icons flush-left with the hero text baseline */
+    margin-left: calc(var(--space-2) * -1);
+  }
+
+  /* --- Device --- */
+  .device-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+  }
+
+  .glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 40%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 68%
+    );
+  }
+
+  .device {
+    position: relative;
+    width: 180px;
+    aspect-ratio: 9 / 16;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface-2);
+    overflow: hidden;
+    transform: rotate(-5deg);
+  }
+
+  .device :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* --- Proof bar --- */
+  .proof {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin: var(--space-4) 0 0;
+    background-color: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .proof-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-5);
+    background-color: var(--color-surface);
+  }
+
+  /*
+   * Fixed row height, bottom-aligned. The text cell ("Radar Madura") is set
+   * smaller than the numerals, so without this its shorter line box pulls the
+   * label up and that one cell reads as misaligned against the other three.
+   */
+  .proof-value {
+    display: flex;
+    align-items: flex-end;
+    min-height: calc(var(--fs-xl) * 1.2);
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-semibold);
+    color: var(--color-accent);
+    letter-spacing: var(--ls-tight);
+    line-height: 1.2;
+  }
+
+  .proof-value-text {
+    font-size: var(--fs-base);
+    color: var(--color-text);
+    letter-spacing: var(--ls-snug);
+  }
+
+  .proof-label {
+    font-size: var(--fs-xs);
+    color: var(--color-text-subtle);
+    margin: 0;
+  }
+
+  /* --- Tablet: device shrinks before it goes --- */
+  @media (max-width: 900px) {
+    .hero-grid {
+      padding: var(--space-8);
+      gap: var(--space-6);
+    }
+
+    .device {
+      width: 150px;
+    }
+
+    .device-wrap {
+      min-height: 260px;
+    }
+  }
+
+  /*
+   * Below 768px the split collapses. The device is decorative and costs
+   * vertical space above the fold on a phone, so it is dropped rather than
+   * stacked — the project cards further down carry the same imagery.
+   */
+  @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr);
+      padding: var(--space-6);
+    }
+
+    .device-wrap {
+      display: none;
+    }
+
+    .proof {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   @media (max-width: 640px) {
     .hero {
-      padding-block: var(--space-16) var(--space-12);
+      padding-block: var(--space-6);
     }
 
     .name {
@@ -84,8 +318,14 @@ import { SITE } from '@/config/site';
       font-size: var(--fs-xl);
     }
 
-    .subtitle {
-      font-size: var(--fs-base);
+    .cta-group {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .device {
+      transform: none;
     }
   }
 </style>
