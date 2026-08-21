@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Badge from '@/components/ui/Badge.astro';
+import PlaceholderCover from '@/components/ui/PlaceholderCover.astro';
+
+/*
+ * Wide feature card for the in-progress project at the top of the Projects
+ * index. Deliberately the only large element on that page so current work
+ * keeps its emphasis against the dense list below.
+ */
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  headingLevel?: 2 | 3;
+}
+
+const { entry, headingLevel = 2 } = Astro.props;
+const { data } = entry;
+const TitleTag = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<article class="current">
+  <div class="body">
+    <p class="eyebrow">
+      <span class="pill">
+        <span class="dot" aria-hidden="true"></span>
+        Current work
+      </span>
+      <span class="meta">{data.category} · {data.sector}</span>
+    </p>
+
+    <TitleTag class="title">
+      <a href={`/projects/${entry.id}/`}>{data.title}</a>
+    </TitleTag>
+
+    <p class="description">{data.description}</p>
+
+    {
+      data.tech.length > 0 && (
+        <ul class="tech" aria-label="Tech used">
+          {data.tech.slice(0, 6).map((t) => (
+            <li>
+              <Badge variant="neutral">{t}</Badge>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <div class="device-wrap" aria-hidden="true">
+    <div class="glow"></div>
+    <div class="device">
+      {
+        data.placeholderCover ? (
+          <PlaceholderCover ratio="9 / 16" />
+        ) : (
+          <Image src={data.cover} alt="" widths={[150, 300]} sizes="112px" loading="lazy" />
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .current {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    gap: var(--space-6);
+    align-items: center;
+    padding: var(--space-6) var(--space-8);
+    background-color: var(--color-surface);
+    /* Accent border marks this as live work without needing a louder treatment. */
+    border: 1px solid var(--color-accent-soft-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-3);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    background-color: var(--color-accent-soft-bg);
+    border: 1px solid var(--color-accent-soft-border);
+    border-radius: var(--radius-full);
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+  }
+
+  .meta {
+    font-size: var(--fs-xs);
+    color: var(--color-text-subtle);
+  }
+
+  .title {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-snug);
+    margin: 0 0 var(--space-3);
+  }
+
+  .title a {
+    color: var(--color-text);
+  }
+
+  .title a:hover {
+    color: var(--color-accent);
+  }
+
+  .description {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    line-height: var(--lh-normal);
+    max-width: 54ch;
+    margin: 0 0 var(--space-4);
+  }
+
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .device-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 190px;
+  }
+
+  .glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 45%,
+      color-mix(in srgb, var(--color-accent) 14%, transparent),
+      transparent 68%
+    );
+  }
+
+  .device {
+    position: relative;
+    width: 112px;
+    aspect-ratio: 9 / 16;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-2);
+    overflow: hidden;
+    transform: rotate(-5deg);
+  }
+
+  .device :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .current {
+      grid-template-columns: minmax(0, 1fr);
+      padding: var(--space-5);
+    }
+
+    .device-wrap {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .device {
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,196 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+/*
+ * Dense row used on the Projects index. Chosen over a card grid because two of
+ * the shipped apps have no mockup yet — a missing thumbnail is a hole in a card
+ * grid but barely registers at 54px. Swap back to ProjectCard if full artwork
+ * ever lands for every project.
+ */
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  headingLevel?: 2 | 3 | 4;
+}
+
+const { entry, headingLevel = 3 } = Astro.props;
+const { data } = entry;
+const TitleTag = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+---
+
+<li class="row">
+  <a class="row-link" href={`/projects/${entry.id}/`}>
+    <span class="thumb">
+      {
+        !data.placeholderCover ? (
+          <Image src={data.cover} alt="" widths={[108]} sizes="54px" loading="lazy" />
+        ) : (
+          <svg
+            aria-hidden="true"
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="6" y="2" width="12" height="20" rx="2.5" />
+            <path d="M11 18h2" />
+          </svg>
+        )
+      }
+    </span>
+
+    <TitleTag class="title">{data.title}</TitleTag>
+
+    <span class="description">{data.description}</span>
+
+    <span class="meta">
+      <span class="category">{data.category}</span>
+      <span class="sector">{data.sector}</span>
+    </span>
+
+    <span class="chevron" aria-hidden="true">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M9 6l6 6-6 6"></path>
+      </svg>
+    </span>
+  </a>
+</li>
+
+<style>
+  .row {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .row-link {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 3fr) minmax(0, 5fr) minmax(0, 2fr) 16px;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-4) var(--space-3);
+    color: inherit;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--motion-fast);
+  }
+
+  .row-link:hover,
+  .row-link:focus-visible {
+    background-color: var(--color-surface);
+    color: inherit;
+  }
+
+  .thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-2);
+    color: var(--color-text-subtle);
+    overflow: hidden;
+  }
+
+  .thumb :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .title {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-snug);
+    margin: 0;
+  }
+
+  .row-link:hover .title {
+    color: var(--color-accent);
+  }
+
+  .description {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    line-height: var(--lh-snug);
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .category {
+    font-size: var(--fs-sm);
+    color: var(--color-text);
+  }
+
+  .sector {
+    font-size: var(--fs-xs);
+    color: var(--color-text-subtle);
+  }
+
+  .chevron {
+    display: flex;
+    color: var(--color-text-subtle);
+  }
+
+  .row-link:hover .chevron {
+    color: var(--color-accent);
+  }
+
+  /* Tablet: fold the meta column under the title, drop the chevron. */
+  @media (max-width: 860px) {
+    .row-link {
+      grid-template-columns: 54px minmax(0, 1fr);
+      grid-template-areas:
+        'thumb title'
+        'thumb meta'
+        'desc  desc';
+      gap: var(--space-2) var(--space-4);
+    }
+
+    .thumb {
+      grid-area: thumb;
+      align-self: start;
+    }
+
+    .title {
+      grid-area: title;
+    }
+
+    .meta {
+      grid-area: meta;
+      flex-direction: row;
+      gap: var(--space-2);
+      align-items: baseline;
+    }
+
+    .sector::before {
+      content: '· ';
+    }
+
+    .description {
+      grid-area: desc;
+      margin-top: var(--space-1);
+    }
+
+    .chevron {
+      display: none;
+    }
+  }
+</style>
