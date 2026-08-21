@@ -35,8 +35,23 @@ const { title, description, image, noindex, emitPersonSchema, ogType } = Astro.p
 </BaseLayout>
 
 <style is:global>
+  /*
+   * Sections carry their own vertical rhythm, so #main only supplies the gap
+   * for pages that place bare content in it (blog, 404). A section's own
+   * top padding is collapsed when it leads the page — otherwise #main's
+   * padding and the section's stack, and a page heading sits twice as far
+   * down as one on a page without a section wrapper.
+   */
   #main {
     padding-block: var(--space-12);
+  }
+
+  #main > section:first-child {
+    padding-block-start: 0;
+  }
+
+  #main > section:last-child {
+    padding-block-end: 0;
   }
 
   @media (max-width: 640px) {
