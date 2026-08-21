@@ -144,7 +144,8 @@ const formAction = `https://formspree.io/f/${SITE.formspreeId}`;
   .field textarea {
     width: 100%;
     padding: var(--space-3) var(--space-4);
-    background-color: var(--color-bg);
+    /* Surface, not page: inputs are cards and must stay lighter than the ground. */
+    background-color: var(--color-surface);
     color: var(--color-text);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
