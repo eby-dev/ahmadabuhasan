@@ -126,9 +126,12 @@ export const SITE = {
     ],
   },
 
-  // TODO: replace with self-hosted 1200×630 hero card + local portrait once designed.
-  // Until then we point at the GitHub avatar so social previews and JSON-LD work.
-  ogDefaultImage: 'https://github.com/eby-dev.png',
+  // Self-hosted 1200×630 social card. Typographic, no portrait — swap in a
+  // photo-based card here if one is ever shot.
+  ogDefaultImage: '/og/default.png',
+
+  // TODO: replace with a local portrait once one exists. JSON-LD `image` wants
+  // a picture of the person, so the card above is not a substitute here.
   jsonLdPortraitImage: 'https://github.com/eby-dev.png',
 } as const;
 
