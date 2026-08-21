@@ -101,14 +101,15 @@ const target = external ? '_blank' : undefined;
   }
 
   .variant-primary {
-    background-color: var(--color-text);
-    color: var(--color-bg);
-    border-color: var(--color-text);
+    background-color: var(--color-accent);
+    color: var(--color-accent-fg);
+    border-color: var(--color-accent);
+    font-weight: var(--fw-semibold);
   }
 
   .variant-primary:hover {
-    background-color: var(--color-text-muted);
-    border-color: var(--color-text-muted);
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
   }
 
   .variant-secondary {

@@ -35,15 +35,16 @@ const classes = ['badge', `variant-${variant}`, className].filter(Boolean).join(
   }
 
   .variant-accent {
-    background-color: transparent;
+    background-color: var(--color-accent-soft-bg);
     color: var(--color-accent);
-    border-color: var(--color-accent);
+    border-color: var(--color-accent-soft-border);
   }
 
+  /* Shares the accent tint: on this site "success" means shipped, not a state change. */
   .variant-success {
-    background-color: transparent;
-    color: var(--color-success);
-    border-color: var(--color-success);
+    background-color: var(--color-accent-soft-bg);
+    color: var(--color-accent);
+    border-color: var(--color-accent-soft-border);
   }
 
   .variant-muted {

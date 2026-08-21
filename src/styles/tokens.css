@@ -5,20 +5,39 @@
  */
 
 :root {
-  /* --- Colors: light theme (default) --- */
-  --color-bg: #ffffff;
-  --color-surface: #fafafa;
-  --color-surface-2: #f5f5f5;
-  --color-border: #e5e5e5;
-  --color-border-strong: #d4d4d4;
-  --color-text: #0a0a0a;
-  --color-text-muted: #525252;
-  --color-text-subtle: #737373;
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
+  /*
+   * Colors: light theme.
+   *
+   * The design is dark-first — the dark palette below is the one it was drawn
+   * against, and it is what most visitors see. Light is a first-class variant,
+   * not an afterthought: `prefers-color-scheme` is honoured either way.
+   *
+   * Surfaces INVERT between the themes rather than mirroring. In dark, cards
+   * sit lighter than the page. Doing the same here (white page, near-white
+   * cards) gave 1.04 contrast and the cards this design is built from simply
+   * vanished. So in light the page is tinted and cards are pure white: 1.17,
+   * which is what makes a card read as a card.
+   */
+  --color-bg: #eaeeec;
+  --color-surface: #ffffff;
+  --color-surface-2: #f2f5f4;
+  --color-border: #d5dbd9;
+  --color-border-strong: #b6bfbc;
+  --color-text: #0a0f0d;
+  --color-text-muted: #4b5654;
+  /* Dark enough to clear AA on the tinted page ground, not just on white. */
+  --color-text-subtle: #5c6664;
+
+  /* Teal reads as Android/Flutter. Darkened here for AA on white (5.5:1). */
+  --color-accent: #047857;
+  --color-accent-hover: #036349;
   --color-accent-fg: #ffffff;
   --color-danger: #dc2626;
   --color-success: #15803d;
+
+  /* Tint for accent-bearing chips and badges. */
+  --color-accent-soft-bg: #dff5ea;
+  --color-accent-soft-border: #9ad9bd;
 
   /* --- Typography --- */
   --font-sans:
@@ -90,21 +109,27 @@
   --focus-ring-offset: 2px;
 }
 
-/* --- Colors: dark theme --- */
+/*
+ * Colors: dark theme — the palette the design was drawn against.
+ * Kept in sync with the prefers-color-scheme block below; edit both.
+ */
 [data-theme='dark'] {
-  --color-bg: #0a0a0a;
-  --color-surface: #111111;
-  --color-surface-2: #171717;
-  --color-border: #262626;
-  --color-border-strong: #404040;
+  --color-bg: #0d0d0f;
+  --color-surface: #111114;
+  --color-surface-2: #1c1c21;
+  --color-border: #26262b;
+  --color-border-strong: #3a3a42;
   --color-text: #f5f5f5;
   --color-text-muted: #a3a3a3;
-  --color-text-subtle: #737373;
-  --color-accent: #60a5fa;
-  --color-accent-hover: #93c5fd;
-  --color-accent-fg: #0a0a0a;
+  --color-text-subtle: #8a8a92;
+  --color-accent: #3ddc97;
+  --color-accent-hover: #6ff0b8;
+  --color-accent-fg: #06231a;
   --color-danger: #f87171;
   --color-success: #4ade80;
+
+  --color-accent-soft-bg: #14251d;
+  --color-accent-soft-border: #2c4a3d;
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
   --shadow-md: 0 4px 12px rgb(0 0 0 / 45%);
@@ -118,19 +143,22 @@
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-bg: #0a0a0a;
-    --color-surface: #111111;
-    --color-surface-2: #171717;
-    --color-border: #262626;
-    --color-border-strong: #404040;
+    --color-bg: #0d0d0f;
+    --color-surface: #111114;
+    --color-surface-2: #1c1c21;
+    --color-border: #26262b;
+    --color-border-strong: #3a3a42;
     --color-text: #f5f5f5;
     --color-text-muted: #a3a3a3;
-    --color-text-subtle: #737373;
-    --color-accent: #60a5fa;
-    --color-accent-hover: #93c5fd;
-    --color-accent-fg: #0a0a0a;
+    --color-text-subtle: #8a8a92;
+    --color-accent: #3ddc97;
+    --color-accent-hover: #6ff0b8;
+    --color-accent-fg: #06231a;
     --color-danger: #f87171;
     --color-success: #4ade80;
+
+    --color-accent-soft-bg: #14251d;
+    --color-accent-soft-border: #2c4a3d;
 
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
     --shadow-md: 0 4px 12px rgb(0 0 0 / 45%);
