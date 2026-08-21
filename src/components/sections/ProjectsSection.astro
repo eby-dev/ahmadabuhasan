@@ -4,9 +4,16 @@ import Container from '@/components/layout/Container.astro';
 import SectionTitle from '@/components/ui/SectionTitle.astro';
 import Button from '@/components/ui/Button.astro';
 import ProjectCard from './ProjectCard.astro';
+import ProjectListRow from './ProjectListRow.astro';
+import CurrentWorkCard from './CurrentWorkCard.astro';
 
 type Mode = 'featured' | 'all';
 type Category = 'all' | 'Android Native' | 'Flutter';
+/*
+ * 'cards' suits a short, hand-picked set (the homepage). 'list' suits the full
+ * index, where density beats artwork and not every project has a mockup.
+ */
+type Layout = 'cards' | 'list';
 
 interface Props {
   mode?: Mode;
@@ -15,6 +22,7 @@ interface Props {
   showViewAll?: boolean;
   limit?: number;
   titleLevel?: 1 | 2 | 3;
+  layout?: Layout;
 }
 
 const {
@@ -24,10 +32,14 @@ const {
   showViewAll = false,
   limit,
   titleLevel = 2,
+  layout = 'cards',
 } = Astro.props;
 
 type ProjectEntry = CollectionEntry<'projects'>;
 let entries: ProjectEntry[] = await getCollection('projects');
+
+/* Kept before filtering so the "view all" link can name the real total. */
+const totalCount = entries.length;
 
 if (mode === 'featured') {
   entries = entries.filter((e) => e.data.featured);
@@ -47,6 +59,16 @@ entries.sort((a, b) => {
 if (typeof limit === 'number') {
   entries = entries.slice(0, limit);
 }
+
+/*
+ * On the list layout the in-progress project is lifted out into a feature card
+ * above the list. Only the first one is promoted; any others stay in the list
+ * so the page never grows a second hero.
+ */
+const promoted =
+  layout === 'list' ? (entries.find((e) => e.data.status === 'in-progress') ?? null) : null;
+const listed = promoted ? entries.filter((e) => e.id !== promoted.id) : entries;
+const childLevel = (titleLevel + 1) as 2 | 3 | 4;
 ---
 
 <section class="projects" aria-labelledby={showTitle ? 'projects-heading' : undefined}>
@@ -66,14 +88,31 @@ if (typeof limit === 'number') {
       )
     }
 
+    {promoted && <CurrentWorkCard entry={promoted} headingLevel={childLevel as 2 | 3} />}
+
     {
       entries.length === 0 ? (
         <p class="empty">Projects will be published soon.</p>
+      ) : layout === 'list' ? (
+        <>
+          {promoted && listed.length > 0 && (
+            <p class="list-heading">
+              <span>Shipped</span>
+              <span class="rule" aria-hidden="true" />
+              <span class="count">{String(listed.length).padStart(2, '0')}</span>
+            </p>
+          )}
+          <ul class="list">
+            {listed.map((entry) => (
+              <ProjectListRow entry={entry} headingLevel={childLevel} />
+            ))}
+          </ul>
+        </>
       ) : (
         <ul class="grid">
           {entries.map((entry) => (
             <li>
-              <ProjectCard entry={entry} headingLevel={(titleLevel + 1) as 2 | 3 | 4} />
+              <ProjectCard entry={entry} headingLevel={childLevel} />
             </li>
           ))}
         </ul>
@@ -84,7 +123,7 @@ if (typeof limit === 'number') {
       showViewAll && entries.length > 0 && (
         <div class="view-all">
           <Button href="/projects" variant="secondary" size="md">
-            View all projects
+            View all {totalCount} projects
             <svg
               aria-hidden="true"
               width="14"
@@ -116,13 +155,59 @@ if (typeof limit === 'number') {
     font-style: italic;
   }
 
+  .list-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-8) 0 0;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .list-heading .rule {
+    flex-grow: 1;
+    height: 1px;
+    background-color: var(--color-border);
+  }
+
+  .list-heading .count {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  /*
+   * Fixed column count rather than auto-fill, so the row never leaves a
+   * stranded card: three across for the homepage's three featured projects.
+   */
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-6);
     list-style: none;
     padding: 0;
     margin: 0;
+  }
+
+  @media (max-width: 1000px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .grid > li {
@@ -137,6 +222,6 @@ if (typeof limit === 'number') {
   .view-all {
     display: flex;
     justify-content: center;
-    margin-top: var(--space-12);
+    margin-top: var(--space-8);
   }
 </style>

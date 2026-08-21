@@ -16,9 +16,12 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
+  /*
+   * No margin-top: #main already ends with its own padding, and stacking a
+   * second gap on top of it left the footer stranded far below the content.
+   */
   .site-footer {
     border-top: 1px solid var(--color-border);
-    margin-top: var(--space-24);
     padding: var(--space-8) var(--container-padding);
     background-color: var(--color-bg);
   }

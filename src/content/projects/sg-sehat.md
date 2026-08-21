@@ -7,6 +7,20 @@ description: >-
   (Zego), hospital map, service booking, educational mini-games (Flame), and
   offline caching.
 cover: ../../assets/projects/sg-sehat.png
+client: Cipta Nirmala Group
+contribution: Flutter developer
+problem: >-
+  Patients had to phone or queue in person for every interaction with the
+  hospital — booking a service, finding the right building, reaching a doctor
+  for something that did not need a visit. Hospital buildings are also where
+  mobile signal is worst, so an app that assumed connectivity would fail exactly
+  where it was needed.
+approach: >-
+  One Flutter app covering teleconsultation, service booking, and hospital
+  wayfinding. Zego UIKit carries real-time video so a consultation does not need
+  a visit. Responses are cached through Hive and a Dio cache interceptor, so the
+  app stays usable in a dead spot and syncs when signal returns. Flame powers
+  the health-education mini-games that keep patients returning between visits.
 tech:
   - Flutter
   - Dart

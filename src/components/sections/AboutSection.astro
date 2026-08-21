@@ -13,8 +13,15 @@ interface Props {
 const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
 ---
 
-<section class="about" aria-labelledby={showTitle ? 'about-heading' : undefined}>
-  <Container narrow>
+<section
+  class:list={['about', !showTitle && 'is-inline']}
+  aria-labelledby={showTitle ? 'about-heading' : undefined}
+>
+  {
+    /* Narrow only on its own page; inline on the homepage it must line up with
+      the hero and project grid, which use the full container. */
+  }
+  <Container narrow={showTitle}>
     {
       showTitle && (
         <SectionTitle
@@ -30,8 +37,8 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
       <p>
         I'm a Mobile Developer with 3+ years of experience shipping production Android (Kotlin/Java)
         and Flutter apps. I currently work at
-        <strong>Brighton Real Estate</strong> in Surabaya, contributing to a production real estate
-        Android app in an MVP + Dagger 2 architecture.
+        <strong>Brighton Real Estate</strong> in Surabaya, contributing to a production real estate Android
+        app in an MVP + Dagger 2 architecture.
       </p>
 
       {
@@ -95,6 +102,14 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
     padding-block: var(--space-12);
   }
 
+  /*
+   * Untitled variant (homepage). Without a heading to anchor it, the full
+   * padding reads as a gap rather than a section break.
+   */
+  .about.is-inline {
+    padding-block: var(--space-8);
+  }
+
   .prose {
     display: flex;
     flex-direction: column;
@@ -102,6 +117,8 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
     color: var(--color-text);
     font-size: var(--fs-lg);
     line-height: var(--lh-normal);
+    /* Keeps lines readable when the inline variant uses the full container. */
+    max-width: 68ch;
   }
 
   .prose strong {

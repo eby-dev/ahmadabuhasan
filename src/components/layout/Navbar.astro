@@ -93,20 +93,32 @@ const items: readonly NavItem[] = showBlog
 </nav>
 
 <style>
+  /*
+   * A rounded bar inset from the page edge rather than a full-bleed strip —
+   * it reads as part of the card system the rest of the site is built from.
+   * The outer margin keeps it clear of the viewport edge while sticky.
+   */
   .site-header {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-4) var(--container-padding);
+    padding: var(--space-3) var(--space-5);
     max-width: var(--container-max);
-    margin-inline: auto;
-    border-bottom: 1px solid var(--color-border);
-    background-color: var(--color-bg);
+    margin: var(--space-4) auto 0;
+    inline-size: calc(100% - var(--container-padding) * 2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    /*
+     * Opaque, not tinted: the bar sits over page content while sticky, and a
+     * translucent fill let text read through it. blur() alone is not enough
+     * because Safari and Firefox drop it in several conditions.
+     */
+    background-color: var(--color-surface);
     position: sticky;
-    top: 0;
+    top: var(--space-4);
     z-index: 50;
-    backdrop-filter: saturate(180%) blur(6px);
+    box-shadow: var(--shadow-md);
   }
 
   .brand {
@@ -190,10 +202,13 @@ const items: readonly NavItem[] = showBlog
     flex-direction: column;
     gap: var(--space-1);
     list-style: none;
-    margin: 0;
-    padding: var(--space-4) var(--container-padding);
-    border-bottom: 1px solid var(--color-border);
-    background-color: var(--color-bg);
+    margin: var(--space-2) auto 0;
+    inline-size: calc(100% - var(--container-padding) * 2);
+    max-width: var(--container-max);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
   }
 
   .mobile-link {

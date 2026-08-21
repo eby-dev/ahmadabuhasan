@@ -1,100 +1,100 @@
 ---
-title: 'Ketika null Berubah Jadi Kata "null"'
-description: 'Satu jebakan Kotlin yang muncul saat memigrasi aplikasi Android lama dari Java — dan kenapa null-safety tidak menyelamatkanmu di batas jaringan.'
+title: 'When null Becomes the Word "null"'
+description: 'A Kotlin trap that surfaces while migrating an old Android app off Java — and why null-safety stops helping at the network boundary.'
 publishedAt: 2026-08-18
 draft: false
 tags: ['android', 'kotlin', 'migration']
 ---
 
-Hampir dua tahun terakhir saya mengerjakan satu aplikasi Android yang sudah lama
-jalan di produksi — basisnya Java, arsitekturnya MVP, dipakai ribuan orang setiap
-hari.
+For close to two years now I have been working on one Android app that has been
+in production a long time — Java at its core, MVP architecture, thousands of
+people opening it every day.
 
-Salah satu pekerjaan yang terus berjalan di latar belakang: memigrasi kodenya ke
-Kotlin. Bukan proyek besar dengan tenggat, tapi cicilan — satu modul per beberapa
-minggu, di sela-sela fitur baru. Sampai sekarang masih separuh jalan, dan masih
-jalan.
+One task runs quietly in the background the whole time: migrating the code to
+Kotlin. Not a big project with a deadline, but instalments — one module every
+few weeks, fitted around new features. It is still half done, and still going.
 
-Tulisan ini soal satu jenis bug yang berulang saya temui di tengahnya. Menurut
-saya ini bug paling khas untuk migrasi Java→Kotlin, karena justru muncul dari
-fitur Kotlin yang seharusnya melindungi kita.
+This is about one kind of bug I kept running into along the way. I think it is
+the most characteristic Java-to-Kotlin migration bug there is, because it comes
+out of the very feature meant to protect you.
 
-## Bentuk bug-nya
+## What the bug looks like
 
-Bayangkan sebuah form yang mengirim data profil ke server. Setelah dimigrasi ke
-Kotlin, kodenya kira-kira seperti ini:
+Picture a form that sends profile data to a server. After the migration to
+Kotlin, the code reads roughly like this:
 
 ```kotlin
 params["city_id"] = user.selectedCity?.id.toString()
 params["region_id"] = user.selectedRegion?.id.toString()
 ```
 
-Kelihatan aman. Ada `?.`, jadi kalau `selectedCity` belum dipilih tidak akan
+It looks safe. There is a `?.`, so if no city has been picked yet it will not
 crash.
 
-Dan memang tidak crash. Yang terjadi lebih halus: server menerima **string
-`"null"`** — empat huruf, n-u-l-l — lalu gagal mem-parse-nya sebagai angka.
+And it does not crash. What happens is quieter: the server receives the
+**string `"null"`** — four characters, n-u-l-l — and then fails to parse it as a
+number.
 
-## Kenapa bisa begitu
+## Why it happens
 
-Perhatikan di mana `?.` berhenti bekerja:
+Look at where `?.` stops working:
 
 ```kotlin
 user.selectedCity?.id.toString()
 //               ^^^          ^^^
-//               aman         TIDAK aman
+//               safe         NOT safe
 ```
 
-`?.` hanya melindungi pemanggilan `.id`. Kalau `selectedCity` null, ekspresi
-`selectedCity?.id` menghasilkan `null` — dan `.toString()` berikutnya dipanggil
-**pada hasil null itu**, bukan di-skip.
+`?.` only guards the `.id` call. If `selectedCity` is null, the expression
+`selectedCity?.id` evaluates to `null` — and the `.toString()` that follows is
+called **on that null**, not skipped.
 
-Di Kotlin, `null.toString()` bukan error. Itu memanggil ekstensi
-`Any?.toString()`, yang dengan patuh mengembalikan string `"null"`.
+In Kotlin, `null.toString()` is not an error. It calls the `Any?.toString()`
+extension, which dutifully returns the string `"null"`.
 
-Jadi alih-alih crash yang langsung kelihatan, kita dapat data kotor yang lolos
-sampai ke server.
+So instead of a crash you can see, you get dirty data that travels all the way
+to the server.
 
-Perbaikannya satu operator, plus satu pemanggilan:
+The fix is one operator, plus one call:
 
 ```kotlin
 params["city_id"] = user.selectedCity?.id?.toString().orEmpty()
 //                                       ^
-//                            ?. kedua, dan .orEmpty() di ujung
+//                        a second ?., and .orEmpty() at the end
 ```
 
-Sekarang null jadi string kosong, bukan kata "null".
+Now null becomes an empty string rather than the word "null".
 
-## Kenapa ini menarik
+## Why it is interesting
 
-Bug seperti ini tidak akan muncul di Java.
+This bug cannot happen in Java.
 
-Di Java, `user.getSelectedCity().getId()` pada objek null langsung melempar
-`NullPointerException`. Berisik, tapi jujur — kamu tahu persis ada yang salah, dan
-tahu di baris mana.
+In Java, `user.getSelectedCity().getId()` on a null object throws a
+`NullPointerException` immediately. Noisy, but honest — you know something is
+wrong, and you know which line.
 
-Kotlin menawarkan `?.` supaya kita tidak perlu menulis pengecekan null bertingkat.
-Tapi kalau operatornya dipakai setengah jalan, hasilnya bukan keamanan — hanya
-kegagalan yang lebih sunyi. Crash berubah jadi data rusak, dan data rusak jauh
-lebih mahal untuk ditemukan.
+Kotlin offers `?.` so you do not have to write nested null checks. But use the
+operator only halfway and what you get is not safety — just a quieter failure.
+A crash turns into corrupted data, and corrupted data is far more expensive to
+find.
 
-Yang paling merepotkan: bug ini tidak muncul di jalur normal. Selama pengguna
-mengisi semua field, semuanya baik-baik saja. Baru terlihat ketika ada field
-opsional yang dilewati — dan itu justru kasus yang paling jarang dites.
+The awkward part: this bug never shows up on the happy path. As long as users
+fill in every field, everything is fine. It only appears when an optional field
+is skipped — which is exactly the case that gets tested least.
 
-## Dua hal yang saya bawa dari migrasi ini
+## Two things I took from this migration
 
-**Null-safety itu properti batas sistem, bukan properti bahasa.** Kotlin menjaga
-apa yang terjadi di dalam kodenya. Yang keluar lewat jaringan cuma string — dan di
-situ `"null"`, `""`, dan tidak-mengirim-apa-apa adalah tiga hal yang sangat
-berbeda bagi server. Compiler tidak bisa menolongmu di perbatasan itu.
+**Null-safety is a property of system boundaries, not of a language.** Kotlin
+guards what happens inside its own code. What leaves over the network is just
+strings — and out there `"null"`, `""`, and sending nothing at all are three
+very different things to a server. The compiler cannot help you at that border.
 
-**Migrasi bertahap itu benar, tapi jangan mekanis.** Setiap modul yang saya
-pindahkan, saya baca ulang alur datanya, bukan cuma menerjemahkan sintaksnya. Bug
-di atas justru lolos kalau saya hanya mengubah `getId()` jadi `?.id` lalu
-menganggap pekerjaan selesai.
+**Incremental migration is right, but do not make it mechanical.** For every
+module I moved, I re-read how the data flowed rather than only translating the
+syntax. The bug above sails straight through if you change `getId()` to `?.id`
+and call it done.
 
-Dan satu keputusan yang saya syukuri: **arsitekturnya tidak saya ganti.** MVP
-tetap MVP, hanya bahasanya yang berpindah. Menggabungkan dua perubahan besar
-sekaligus di aplikasi yang dipakai orang setiap hari akan membuat setiap bug sulit
-dilacak — salah bahasa, atau salah arsitektur? Satu perubahan pada satu waktu.
+And one decision I am glad about: **I left the architecture alone.** MVP stayed
+MVP; only the language moved. Stacking two large changes at once in an app
+people use daily makes every bug hard to trace — is it the language, or the
+architecture? One change at a time.
