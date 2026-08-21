@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import Badge from '@/components/ui/Badge.astro';
 import Card from '@/components/ui/Card.astro';
+import PlaceholderCover from '@/components/ui/PlaceholderCover.astro';
 
 interface Props {
   entry: CollectionEntry<'projects'>;
@@ -19,16 +20,22 @@ const statusVariant =
 const statusLabel = data.status === 'in-progress' ? 'In progress' : data.status;
 ---
 
-<Card interactive padding="none" as="article" class="project-card">
+<Card interactive padding="none" as="article" stack class="project-card">
   <div class="media">
-    <Image
-      src={data.cover}
-      alt={`${data.title} — screenshot`}
-      widths={[400, 800]}
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-      loading="lazy"
-      decoding="async"
-    />
+    {
+      data.placeholderCover ? (
+        <PlaceholderCover />
+      ) : (
+        <Image
+          src={data.cover}
+          alt={`${data.title} — screenshot`}
+          widths={[400, 800]}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+          loading="lazy"
+          decoding="async"
+        />
+      )
+    }
   </div>
 
   <div class="body">
@@ -120,11 +127,7 @@ const statusLabel = data.status === 'in-progress' ? 'In progress' : data.status;
 </Card>
 
 <style>
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
+  /* Column layout comes from Card's `stack` prop — see the note there. */
 
   .media {
     aspect-ratio: 16 / 10;
@@ -139,12 +142,17 @@ const statusLabel = data.status === 'in-progress' ? 'In progress' : data.status;
     display: block;
   }
 
+  /*
+   * flex-basis 0 (not `flex: 1` alone, whose auto basis lets content height
+   * win) so the body fills whatever the card's row height turns out to be.
+   * That is what keeps .links pinned to the same line across every card.
+   */
   .body {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
     padding: var(--space-6);
-    flex: 1;
+    flex: 1 1 0;
   }
 
   .head {
@@ -181,12 +189,14 @@ const statusLabel = data.status === 'in-progress' ? 'In progress' : data.status;
     margin: var(--space-1) 0 0;
   }
 
+  /* margin-top:auto pins this to the card foot so every card's links align. */
   .links {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
     margin-top: auto;
-    padding-top: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
   }
 
   .links a {

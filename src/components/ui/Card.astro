@@ -3,6 +3,13 @@ interface Props {
   as?: 'article' | 'div' | 'li' | 'section';
   interactive?: boolean;
   padding?: 'sm' | 'md' | 'lg' | 'none';
+  /**
+   * Lay the card out as a full-height flex column. Needed when a child must be
+   * pinned to the card foot (`margin-top: auto`) so it aligns across a row of
+   * cards — a consumer cannot do this from its own scoped styles, because the
+   * element rendered here carries only this component's scope id.
+   */
+  stack?: boolean;
   class?: string;
 }
 
@@ -10,10 +17,17 @@ const {
   as: Tag = 'article',
   interactive = false,
   padding = 'md',
+  stack = false,
   class: className = '',
 } = Astro.props;
 
-const classes = ['card', `padding-${padding}`, interactive && 'interactive', className]
+const classes = [
+  'card',
+  `padding-${padding}`,
+  interactive && 'interactive',
+  stack && 'stack',
+  className,
+]
   .filter(Boolean)
   .join(' ');
 ---
@@ -25,10 +39,17 @@ const classes = ['card', `padding-${padding}`, interactive && 'interactive', cla
 <style>
   .card {
     display: block;
-    background-color: var(--color-bg);
+    /* Lifted off the page ground so cards read as surfaces in both themes. */
+    background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .padding-none {
