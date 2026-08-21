@@ -39,7 +39,27 @@ const projects = defineCollection({
       sector: z.enum(['Real Estate', 'Healthcare', 'Education', 'Government', 'Other']),
       description: z.string().max(200),
       longDescription: z.string().optional(),
+
+      /* Fact bar on the detail page. Each cell is dropped when its field is absent. */
+      client: z.string().optional(),
+      contribution: z.string().optional(),
+      press: z
+        .object({
+          outlet: z.string(),
+          url: z.url().optional(),
+        })
+        .optional(),
+
+      /* Case narrative. Rendered as two sections above the tech panel. */
+      problem: z.string().optional(),
+      approach: z.string().optional(),
       cover: image(),
+      /*
+       * True when `cover` is a stand-in rather than real artwork. Such covers
+       * are drawn from theme tokens at render time instead of being shown as a
+       * baked image, which would otherwise sit light-on-dark or dark-on-light.
+       */
+      placeholderCover: z.boolean().default(false),
       screenshots: z.array(image()).default([]),
       tech: z.array(z.string()).default([]),
       links: z
