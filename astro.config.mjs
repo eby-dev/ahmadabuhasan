@@ -26,7 +26,7 @@ export default defineConfig({
   compressHTML: true,
   build: {
     format: 'directory',
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
   integrations: [
     mdx(),
