@@ -1,0 +1,4 @@
+# Authorized Digital Sellers (IAB ads.txt). Declares who may sell ad
+# inventory for this domain. The publisher ID is duplicated in
+# SITE.adsense in src/config/site.ts — change both together.
+google.com, pub-8638037215789792, DIRECT, f08c47fec0942fa0

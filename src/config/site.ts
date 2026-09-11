@@ -33,6 +33,29 @@ export const SITE = {
   },
 
   /**
+   * Google AdSense publisher ID (`ca-pub-…`). Empty string removes the
+   * verification meta tag, so clearing this field takes AdSense off the site.
+   *
+   * Verification only — this renders the meta tag Google's crawler looks for,
+   * and nothing else. The ad loader script is deliberately absent: the account
+   * exists to stay active, not to serve ads, and loading it would mean opening
+   * the CSP in public/_headers to Google's ad domains and letting third-party
+   * iframes and cookies onto a site that currently carries no trackers at all.
+   *
+   * To actually serve ads later, both have to happen together — neither works
+   * without the other:
+   *   1. add the loader script to BaseHead.astro, guarded on this same field
+   *   2. allow Google's ad domains in public/_headers under script-src,
+   *      frame-src, img-src and connect-src
+   *
+   * The same ID is hard-coded in public/ads.txt. Google fetches that file over
+   * HTTP and never sees this config, so the two must be changed together.
+   */
+  adsense: {
+    publisherId: 'ca-pub-8638037215789792',
+  },
+
+  /**
    * Ordered list of social profiles rendered in Navbar and Footer.
    * Icon field maps to an inline SVG in SocialLinks.astro.
    */
