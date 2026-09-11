@@ -4,7 +4,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=15552000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://github.com https://*.githubusercontent.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; connect-src 'self' https:; frame-src https:; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests
   # NOTE: 'unsafe-inline' on script-src/style-src is an accepted trade-off.
   # Astro emits several small inline scripts (anti-flash theme init, theme-toggle
   # handler, mobile-menu handler) and inline component <style> blocks. Their
@@ -12,6 +12,20 @@
   # This is a personal portfolio (no user-generated content, no XSS surface),
   # so 'unsafe-inline' remains the pragmatic choice. Migrate to nonce/hash-based
   # CSP if a Pages Function or edge nonce injection is introduced later.
+  #
+  # NOTE: script-src/img-src/connect-src/frame-src carry a bare `https:` for
+  # AdSense. Google only supports a nonce-based CSP and explicitly refuses to
+  # publish a domain allowlist, because the domains its ad code calls change
+  # over time — an allowlist works at first and then blocks ads silently, with
+  # no error anyone would notice. A nonce has to be minted per request, which
+  # `output: 'static'` on Pages cannot do, so `https:` is the supported shape
+  # that survives Google rotating domains.
+  #
+  # What this costs: script-src no longer restricts WHERE scripts come from,
+  # so CSP stops being an XSS backstop. What still holds: frame-ancestors
+  # 'none' (nobody frames this site), form-action (posts only to Formspree),
+  # base-uri 'self', object-src via default-src, and the http -> https upgrade.
+  # Narrow this back to 'self' the moment AdSense comes off the site.
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

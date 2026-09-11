@@ -62,8 +62,7 @@ const adsensePublisherId = SITE.adsense.publisherId;
 {noindex && <meta name="robots" content="noindex, follow" />}
 {!noindex && <meta name="robots" content="index, follow" />}
 
-<!-- Site-ownership verification for Google AdSense. Pairs with /ads.txt;
-     see SITE.adsense in src/config/site.ts for why no ad script loads. -->
+<!-- Site-ownership verification for Google AdSense. Pairs with /ads.txt. -->
 {adsensePublisherId && <meta name="google-adsense-account" content={adsensePublisherId} />}
 
 <!-- Favicons -->
@@ -99,6 +98,20 @@ const adsensePublisherId = SITE.adsense.publisherId;
 <!-- Structured data -->
 <WebSiteJsonLd />
 {emitPersonSchema && <PersonJsonLd />}
+
+<!-- Google AdSense loader. Async and last in head, so it never blocks first
+     render. Requires the widened script-src in public/_headers: Google only
+     supports a nonce-based CSP, which a static build cannot produce. -->
+{
+  adsensePublisherId && (
+    <script
+      is:inline
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsensePublisherId}`}
+      crossorigin="anonymous"
+    />
+  )
+}
 
 <!-- Cloudflare Web Analytics (only when token is configured) -->
 {
