@@ -10,6 +10,7 @@ const year = new Date().getFullYear();
     <p class="copyright">
       © {year}
       {SITE.copyrightHolder}. All rights reserved.
+      <a href="/privacy">Privacy</a>
     </p>
     <SocialLinks size="sm" />
   </div>
@@ -39,6 +40,25 @@ const year = new Date().getFullYear();
     color: var(--color-text-muted);
     font-size: var(--fs-sm);
     margin: 0;
+  }
+
+  /*
+   * Separated by a middot rather than a gap: the link sits inside the
+   * copyright sentence, and without a divider the two run together as one
+   * phrase at small sizes.
+   */
+  .copyright a {
+    color: inherit;
+  }
+
+  .copyright a::before {
+    content: '·';
+    margin-inline: var(--space-2);
+  }
+
+  .copyright a:hover,
+  .copyright a:focus-visible {
+    color: var(--color-text);
   }
 
   @media (max-width: 640px) {
