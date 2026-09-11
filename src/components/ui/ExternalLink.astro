@@ -9,9 +9,14 @@ interface Props {
 const { href, class: className, ariaLabel, showIndicator = false } = Astro.props;
 ---
 
-<a href={href} target="_blank" rel="noopener noreferrer" class={className} aria-label={ariaLabel}>
-  <slot />
-  {
+{
+  /*
+   * No whitespace between the slot and the closing tag: any newline here is
+   * rendered as a space *inside* the link, so prose that ends a sentence with
+   * a link comes out as "… privacy & terms ." with a gap before the full stop.
+   */
+}<a href={href} target="_blank" rel="noopener noreferrer" class={className} aria-label={ariaLabel}
+  ><slot />{
     showIndicator && (
       <svg
         aria-hidden="true"
@@ -28,5 +33,5 @@ const { href, class: className, ariaLabel, showIndicator = false } = Astro.props
         <path d="M14 2 4 12" />
       </svg>
     )
-  }
-</a>
+  }</a
+>

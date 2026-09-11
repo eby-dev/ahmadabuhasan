@@ -1,0 +1,142 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+const title = 'Privacy Policy';
+const description =
+  'What this site collects, who processes it, and how to opt out — advertising cookies and the contact form.';
+
+/*
+ * Shown as "last updated". This is the date the policy text was last changed
+ * by hand, not a build timestamp: a date that moves on every deploy tells a
+ * reader nothing about whether the terms changed.
+ */
+const lastUpdated = '12 September 2026';
+---
+
+<PageLayout title={title} description={description}>
+  <section class="privacy" aria-labelledby="privacy-heading">
+    <Container narrow>
+      <SectionTitle
+        id="privacy-heading"
+        title={title}
+        description={`Last updated ${lastUpdated}`}
+        level={1}
+      />
+
+      <div class="prose">
+        <p>
+          This is a personal portfolio site. It has no accounts, no logins, and no newsletter, so
+          there is nothing to sign up for and nothing stored about you between visits — apart from
+          the two cases below.
+        </p>
+
+        <h2>Advertising</h2>
+        <p>
+          This site shows ads through Google AdSense. Google and its partners set cookies in your
+          browser to serve ads, and use them to show ads based on your visits to this and other
+          sites. This is described in Google's
+          <ExternalLink href="https://policies.google.com/technologies/partner-sites"
+            >privacy &amp; terms</ExternalLink
+          >.
+        </p>
+        <p>
+          You can turn off personalised advertising in
+          <ExternalLink href="https://myadcenter.google.com/">Google Ad Settings</ExternalLink>, or
+          opt out of third-party advertising cookies at
+          <ExternalLink href="https://www.aboutads.info/choices/">aboutads.info</ExternalLink>. Ads
+          will still appear, but they will no longer be tailored to you.
+        </p>
+
+        <h2>Contact form</h2>
+        <p>
+          The <a href="/contact">contact form</a> asks for your email address and a message. Both are
+          sent to
+          <ExternalLink href="https://formspree.io/legal/privacy-policy">Formspree</ExternalLink>,
+          which delivers them to me by email. Nothing from the form is stored on this site. Write
+          only what you are comfortable sending by email.
+        </p>
+
+        <h2>Analytics</h2>
+        <p>
+          This site runs no analytics — no visitor tracking of its own, and no measurement of how
+          pages are used.
+        </p>
+
+        <h2>Questions</h2>
+        <p>
+          Anything unclear here, or a request about your data, can go through the
+          <a href="/contact">contact form</a>.
+        </p>
+        <p class="note">
+          If this policy changes, the date above changes with it. Past versions are in this site's
+          <ExternalLink href="https://github.com/eby-dev/ahmadabuhasan">git history</ExternalLink>.
+        </p>
+      </div>
+    </Container>
+  </section>
+</PageLayout>
+
+<style>
+  .privacy {
+    padding-block: var(--space-12);
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--color-text);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-normal);
+    max-width: 68ch;
+  }
+
+  /*
+   * Headings need more space above than the paragraph gap gives them, so each
+   * section reads as a break rather than another paragraph. The first one is
+   * exempt: SectionTitle already sets the distance from the page heading.
+   */
+  .prose h2 {
+    margin: var(--space-6) 0 0;
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+
+  /*
+   * Underlined, not just tinted. These links sit mid-sentence in body copy,
+   * and axe flags colour as the only cue (link-in-text-block) — in .note the
+   * muted text made the contrast between link and prose too low to rely on.
+   *
+   * :global is required, not stylistic: the ExternalLink anchors carry that
+   * component's scope id rather than this page's, so a plain `.prose p a`
+   * styles the local <a> tags and silently skips every external one.
+   */
+  .prose p :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .note {
+    color: var(--color-text-muted);
+    font-size: var(--fs-base);
+  }
+
+  @media (max-width: 640px) {
+    .prose {
+      font-size: var(--fs-base);
+    }
+
+    .prose h2 {
+      font-size: var(--fs-lg);
+    }
+  }
+</style>

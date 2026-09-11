@@ -29,7 +29,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "serve": "http-server dist -p 4321 -s -c-1",
-    "a11y": "axe http://localhost:4321/ http://localhost:4321/about http://localhost:4321/experience http://localhost:4321/projects http://localhost:4321/projects/sg-sehat http://localhost:4321/projects/e-pakon-siganteng http://localhost:4321/projects/alazhar-id http://localhost:4321/projects/admin-sekolah http://localhost:4321/projects/epesantren http://localhost:4321/skills http://localhost:4321/contact http://localhost:4321/blog http://localhost:4321/404 --exit"
+    "a11y": "axe http://localhost:4321/ http://localhost:4321/about http://localhost:4321/experience http://localhost:4321/projects http://localhost:4321/projects/sg-sehat http://localhost:4321/projects/e-pakon-siganteng http://localhost:4321/projects/alazhar-id http://localhost:4321/projects/admin-sekolah http://localhost:4321/projects/epesantren http://localhost:4321/skills http://localhost:4321/contact http://localhost:4321/privacy http://localhost:4321/blog http://localhost:4321/404 --exit"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
