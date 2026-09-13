@@ -22,6 +22,8 @@
     "start": "astro dev",
     "build": "astro check && astro build && node scripts/prune-dist.mjs",
     "preview": "astro preview",
+    "blog": "node scripts/blog-queue.mjs",
+    "blog:publish": "node scripts/blog-queue.mjs --publish",
     "astro": "astro",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
