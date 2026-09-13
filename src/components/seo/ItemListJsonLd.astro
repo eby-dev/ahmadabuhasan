@@ -1,24 +1,37 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { absoluteUrl } from '@/utils/seo';
+/**
+ * ItemList schema for a listing page.
+ *
+ * Tells Google the page is an ordered index of other pages rather than an
+ * article in its own right, and names what it points at — so the listing is
+ * understood as a hub, and the entries it links are seen as a set.
+ *
+ * Takes plain `{ url, name }` items rather than a collection so the same
+ * component serves /projects and /blog; each caller knows its own route
+ * shape.
+ */
+interface Item {
+  url: string;
+  name: string;
+}
 
 interface Props {
   name: string;
-  entries: CollectionEntry<'projects'>[];
+  items: Item[];
 }
 
-const { name, entries } = Astro.props;
+const { name, items } = Astro.props;
 
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name,
-  numberOfItems: entries.length,
-  itemListElement: entries.map((entry, index) => ({
+  numberOfItems: items.length,
+  itemListElement: items.map((item, index) => ({
     '@type': 'ListItem',
     position: index + 1,
-    url: absoluteUrl(`/projects/${entry.id}/`),
-    name: entry.data.title,
+    url: item.url,
+    name: item.name,
   })),
 };
 ---

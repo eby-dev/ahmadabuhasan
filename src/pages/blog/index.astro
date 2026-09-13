@@ -3,6 +3,8 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/layout/Container.astro';
 import SectionTitle from '@/components/ui/SectionTitle.astro';
+import ItemListJsonLd from '@/components/seo/ItemListJsonLd.astro';
+import { absoluteUrl } from '@/utils/seo';
 import { formatFullDate, toISODate } from '@/utils/dates';
 
 const title = 'Blog';
@@ -15,6 +17,19 @@ posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
 ---
 
 <PageLayout title={title} description={description} noindex={posts.length === 0}>
+  {
+    /* Skipped while the listing is empty: it is noindexed in that state, and
+       describing a list of nothing is a signal with no subject. */
+    posts.length > 0 && (
+      <ItemListJsonLd
+        name="Blog posts by Ahmad Abu Hasan"
+        items={posts.map((post) => ({
+          url: absoluteUrl(`/blog/${post.id}/`),
+          name: post.data.title,
+        }))}
+      />
+    )
+  }
   <Container narrow>
     <SectionTitle title="Blog" level={1} />
 
