@@ -1,6 +1,6 @@
 ---
 title: 'The Language That Only Broke in Production'
-description: 'The language switcher worked on every device I tested. It broke for everyone who installed the app from the Play Store — and the cause was not in the code.'
+description: 'The language switcher worked on every device I tested, and broke for everyone who installed from the Play Store. The cause was not in the code.'
 publishedAt: 2026-09-18
 draft: true
 tags: ['android', 'localization', 'play-store']
