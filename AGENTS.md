@@ -24,6 +24,27 @@ turns CI red for everyone, and Cloudflare will still have deployed.
 Prettier expects LF, so every file reports as unformatted. Verify with
 `npx prettier --check --end-of-line crlf .` — if that passes, CI will pass.
 
+## Publishing a blog post
+
+Posts are written ahead and dated; `src/content/blog/` holds a queue running
+into 2027, two a month on scattered dates.
+
+```
+npm run blog             # the queue, next one first; anything past its date is DUE
+npm run blog:publish     # flips the earliest remaining draft to draft: false
+npm run build
+```
+
+`blog:publish` also generates that post's share card, because cards are not
+built ahead of time — see below. Flipping `draft: false` by hand skips that
+step, and the post silently falls back to the site's default card.
+
+A post needs **both** `draft: false` and a `publishedAt` that has arrived
+before it builds, so publishing a few days early is safe.
+
+After the first post of a new section goes live, request indexing for its URL
+in Search Console. Later posts are found through the sitemap on their own.
+
 ## Content rules
 
 These come from Ahmad's own decisions. Do not undo them without asking.
@@ -61,6 +82,14 @@ These come from Ahmad's own decisions. Do not undo them without asking.
 - **`draft` defaults to true** in the blog schema. A post without an
   explicit `draft: false` builds no page, enters no sitemap, and leaves
   `/blog` noindexed.
+- **Share cards are generated on publish, not up front.** `scripts/og-images.mjs`
+  skips drafts: two dozen cards for unpublished posts would otherwise ship in
+  every deploy for months. `npm run og -- --all` renders them anyway to preview
+  one; delete `public/og/blog/` and re-run bare afterwards, or the drafts' cards
+  get committed.
+- **Analytics is enabled from the Cloudflare Pages dashboard.** `SITE.analytics
+.cloudflareToken` is empty on purpose — filling it in as well loads the beacon
+  twice and counts every visit twice.
 
 ## Versioning
 
