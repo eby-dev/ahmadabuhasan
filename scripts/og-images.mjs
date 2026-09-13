@@ -41,7 +41,7 @@ const ACCENT = '#3ddc97';
 const TEXT = '#f5f5f5';
 const MUTED = '#a3a3a3';
 
-const FONT = "Geist Variable, Geist, Segoe UI, Helvetica Neue, Arial, sans-serif";
+const FONT = 'Geist Variable, Geist, Segoe UI, Helvetica Neue, Arial, sans-serif';
 
 const force = process.argv.includes('--force');
 const includeDrafts = process.argv.includes('--all');
@@ -100,10 +100,7 @@ function buildSvg({ title, tags }) {
   const startY = Math.round((HEIGHT - blockHeight) / 2) + size * 0.78;
 
   const titleTspans = lines
-    .map(
-      (line, i) =>
-        `<tspan x="${PAD}" y="${startY + i * lineHeight}">${escapeXml(line)}</tspan>`,
-    )
+    .map((line, i) => `<tspan x="${PAD}" y="${startY + i * lineHeight}">${escapeXml(line)}</tspan>`)
     .join('');
 
   /* Tag pills, laid out left to right. Width is estimated from the label the

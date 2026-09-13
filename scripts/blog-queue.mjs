@@ -62,7 +62,9 @@ if (process.argv.includes('--publish')) {
 }
 
 const live = posts.filter((p) => !p.draft);
-console.log(`${posts.length} posts — ${live.length} live, ${pending.length} queued.  Today: ${today}\n`);
+console.log(
+  `${posts.length} posts — ${live.length} live, ${pending.length} queued.  Today: ${today}\n`,
+);
 
 for (const p of posts) {
   const due = p.draft && p.date <= today ? ' <- DUE' : '';
