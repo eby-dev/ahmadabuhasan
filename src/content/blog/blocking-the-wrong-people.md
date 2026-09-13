@@ -89,7 +89,7 @@ Root and hooking frameworks are chosen. Someone installed Magisk or Frida on
 purpose. A user with a hooking framework active who is not attacking something
 is rare enough to accept as collateral.
 
-An untrusted install source is *circumstantial*. It describes how the app
+An untrusted install source is _circumstantial_. It describes how the app
 arrived, which is frequently a decision made by an IT department the user has
 never spoken to. The base rate of innocent detections is high, and the cost to
 each of those users is total — the app will not open, and there is nothing
@@ -103,7 +103,7 @@ first one.
 
 **Measure before enforcing.** The silent-logging period was the right call and
 I nearly wasted it. I watched for crashes and integration problems, but I did
-not look hard at *who* was being detected until enforcement made it urgent.
+not look hard at _who_ was being detected until enforcement made it urgent.
 The data to predict this was already sitting in our dashboard.
 
 **Log enough to tell the two cases apart.** After the walk-back I went back and

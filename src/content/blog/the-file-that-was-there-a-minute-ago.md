@@ -109,7 +109,7 @@ get their screenshot.
 
 ## What this changed in how I think
 
-I used to pick `cacheDir` or `filesDir` by asking *is this file important?* A
+I used to pick `cacheDir` or `filesDir` by asking _is this file important?_ A
 screenshot for a bug report does not feel important. It is generated, it is
 disposable, it gets thrown away right after. `cacheDir` felt obviously right.
 

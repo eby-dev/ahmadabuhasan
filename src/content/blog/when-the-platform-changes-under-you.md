@@ -25,7 +25,7 @@ What I found was that "handle insets" means different things per screen, and
 the differences are real:
 
 Most screens want padding for the status and navigation bars, nothing more.
-Screens with text input want insets *without* the keyboard participating —
+Screens with text input want insets _without_ the keyboard participating —
 otherwise the padding fights the keyboard and content jumps. Screens with a
 scrollable body want the bottom inset on the scroll container, not the root,
 so the last item scrolls clear of the gesture bar instead of a gap sitting

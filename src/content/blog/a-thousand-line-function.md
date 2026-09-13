@@ -85,7 +85,7 @@ blocks, a duplicate handler kept "just in case", helpers nothing called.
 
 Deleting it is the part that feels risky, and I want to be honest about how I
 decided. For each block, one question: is there any live path that reaches
-this? Not *might this be useful* — that answer is always maybe, and it is how
+this? Not _might this be useful_ — that answer is always maybe, and it is how
 the file got this way.
 
 Commented-out code is the easy case. It is in version control. Keeping a

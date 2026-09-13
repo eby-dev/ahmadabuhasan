@@ -84,9 +84,9 @@ never removed.
 
 A counter would have cost one line and turned "we think some endpoints do
 this" into a fact with a number attached. That number is also what makes the
-backend conversation concrete: *this fires four thousand times a day on these
-three endpoints* is a different discussion from *we noticed some inconsistent
-dates*.
+backend conversation concrete: _this fires four thousand times a day on these
+three endpoints_ is a different discussion from _we noticed some inconsistent
+dates_.
 
 Same gap I had in the [JSON parsing
 guards](/blog/one-missing-field-empties-the-object/). Twice now I have shipped

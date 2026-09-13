@@ -57,7 +57,7 @@ Each field is now independent. A missing original means no original, and the
 other two sizes still load.
 
 Note what `isStringParamValid` has to check: key present, value not JSON
-`null`, value not the *string* `"null"`, value not empty. That last pair is
+`null`, value not the _string_ `"null"`, value not empty. That last pair is
 not paranoia — a backend that builds JSON by string concatenation will hand
 you `"null"` as four characters, and `has()` returns true for it. I have
 [written about that one before](/blog/kotlin-null-string-migration/) from the

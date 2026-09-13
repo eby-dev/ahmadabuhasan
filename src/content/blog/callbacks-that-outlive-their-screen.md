@@ -7,8 +7,8 @@ tags: ['android', 'lifecycle', 'java']
 ---
 
 Going through a batch of crash reports, four separate issues turned out to be
-the same sentence: *something completed after the screen that started it had
-been destroyed.*
+the same sentence: _something completed after the screen that started it had
+been destroyed._
 
 They looked unrelated in the crash list. A permission dialog, a snackbar, a
 sort action, a dismissal. Different screens, different stack traces, different

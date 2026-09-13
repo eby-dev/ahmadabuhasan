@@ -61,8 +61,8 @@ bring the bug back.
 
 ## Filtering by intent instead
 
-The better question is not *when* the listener is attached but *whether this
-selection means anything*. A selection that matches the state you are already
+The better question is not _when_ the listener is attached but _whether this
+selection means anything_. A selection that matches the state you are already
 in is a no-op whoever sent it:
 
 ```java

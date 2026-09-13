@@ -18,7 +18,7 @@ was not available.
 ## A second endpoint that changes nothing
 
 The fix is a preview call. Before submitting, the app asks the server what
-*would* happen:
+_would_ happen:
 
 ```
 POST  /schedule        creates the booking
@@ -41,8 +41,8 @@ sometimes the existing entry is stale. The server was never trying to prevent
 the clash. It was trying to make sure the person knew about it.
 
 Which is precisely the thing a save-time error is bad at. An error after
-submission reads as *you did something wrong*. The same information before
-submission reads as *here is something you may not have known* — and leaves
+submission reads as _you did something wrong_. The same information before
+submission reads as _here is something you may not have known_ — and leaves
 the decision where it belongs.
 
 ## Why not check on the client

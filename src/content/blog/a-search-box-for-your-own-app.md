@@ -12,7 +12,7 @@ of it lives behind a menu that has been reorganised several times as the
 product grew.
 
 Agents kept asking support where things were. Not how to use them — where they
-*were*. The features existed and were working, and people could not find the
+_were_. The features existed and were working, and people could not find the
 door.
 
 So we added a search box for the app itself. Type "KPR" and get the mortgage
@@ -96,8 +96,8 @@ agreed vocabulary.
 
 What is deliberately not shared is the visibility gate. Each platform binds to
 its own real menu conditions, because that is what "the truth" means on each
-side. Sharing the list of *what exists* is useful. Sharing the judgement about
-*who may see it* would have meant both platforms trusting a document instead of
+side. Sharing the list of _what exists_ is useful. Sharing the judgement about
+_who may see it_ would have meant both platforms trusting a document instead of
 their own code.
 
 ## What I took from it

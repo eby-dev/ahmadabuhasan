@@ -11,8 +11,8 @@ used Android's `DownloadManager` for this, which is the reasonable choice: you
 hand it a URL, it downloads in the background, survives process death, shows a
 notification, and broadcasts when it is finished.
 
-Support kept getting the same report anyway. *I tapped download and nothing
-happened.* No error, no file, no notification. Just nothing.
+Support kept getting the same report anyway. _I tapped download and nothing
+happened._ No error, no file, no notification. Just nothing.
 
 ## Three ways it goes wrong
 
@@ -59,7 +59,7 @@ file, a little later than they should have, and never learns any of this
 happened.
 
 The set of recovered ids is there because of a race I hit immediately. If
-the system broadcast arrives *just after* the watchdog gives up, both paths
+the system broadcast arrives _just after_ the watchdog gives up, both paths
 try to handle the same download and the user gets it twice. Anything that
 recovers a download has to record that it did, and every other path has to
 check that record first.

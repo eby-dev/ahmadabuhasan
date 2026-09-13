@@ -33,7 +33,7 @@ and a device a few minutes fast will lock editing early for someone who has
 done nothing unusual. They see a feature that is simply broken, and there is
 nothing in the app to explain why.
 
-Both problems have the same root. The client was being asked to *decide*
+Both problems have the same root. The client was being asked to _decide_
 something, and the client is not in a position to decide anything the server
 cares about.
 
@@ -75,7 +75,7 @@ object : CountDownTimer(remaining, 1000) {
 ```
 
 Note that the device clock is back — and that this is fine. The countdown is a
-*display*, and its worst failure is showing a number that is slightly off. The
+_display_, and its worst failure is showing a number that is slightly off. The
 decision that matters, whether the save is accepted, still belongs to the
 server, which will reject a late request regardless of what the phone
 believed.

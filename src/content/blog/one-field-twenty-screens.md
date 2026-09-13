@@ -51,7 +51,7 @@ is a week, and by then the decision that caused it was made by people who left
 long ago.
 
 There is a smell I now look for. When a task is described as "add the field to
-all the places", the interesting number is *how many places*, and whether
+all the places", the interesting number is _how many places_, and whether
 anyone can list them from memory. Nobody could list these. I found the last
 three by grepping for the contact intent and checking each hit.
 
@@ -66,7 +66,7 @@ support a feature the business wanted that month. The version I shipped
 touches twenty screens in a way that only adds a fallback. If I got one wrong,
 that screen keeps using the old number — which is what it did yesterday.
 
-The refactor is unbounded and the payoff is invisible until the *next* time
+The refactor is unbounded and the payoff is invisible until the _next_ time
 someone adds a field. The threading is bounded and ships this week.
 
 What I regret is not writing that down anywhere. The next person to add a

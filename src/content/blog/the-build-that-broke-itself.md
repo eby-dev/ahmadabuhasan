@@ -17,7 +17,7 @@ deployment tooling runs on Ruby 2.7; a plugin had released a version requiring
 
 ```yaml
 script:
-  - bundle update    # ← this
+  - bundle update # ← this
   - bundle exec fastlane deployFirebase
 ```
 
@@ -57,7 +57,7 @@ And removing the update:
 
 ```yaml
 script:
-  - bundle exec fastlane deployFirebase   # uses the lockfile
+  - bundle exec fastlane deployFirebase # uses the lockfile
 ```
 
 The upper bounds are the part worth explaining. A lower bound says what you
