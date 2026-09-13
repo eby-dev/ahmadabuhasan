@@ -10,6 +10,7 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -45,6 +46,17 @@ if (process.argv.includes('--publish')) {
   writeFileSync(path, text);
   console.log(`Published  ${next.date}  ${next.title}`);
   console.log(`           ${next.file}`);
+
+  /* Draft cards are not generated ahead of time, so the post needs one now —
+     doing it here means there is no separate step to forget. */
+  console.log('\nGenerating share card…');
+  const og = spawnSync(process.execPath, [join(import.meta.dirname, 'og-images.mjs')], {
+    stdio: 'inherit',
+  });
+  if (og.status !== 0) {
+    console.error('\nCard generation failed — run: node scripts/og-images.mjs');
+  }
+
   console.log('\nNext: npm run build, then commit and push.');
   process.exit(0);
 }

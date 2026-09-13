@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { getImage } from 'astro:assets';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
@@ -21,13 +23,24 @@ const { post } = Astro.props;
 const { data } = post;
 const { Content } = await render(post);
 
-/* Posts carry no artwork of their own yet, so most fall back to the site
-   image. `ogImage` wins over `cover` when a post sets both: one is chosen for
-   sharing, the other for the page. */
+/* Share card, in order of preference:
+   1. `ogImage`/`cover` in the frontmatter, when a post has real artwork
+   2. the generated card at /og/blog/<slug>.png (scripts/og-images.mjs)
+   3. the site-wide default
+
+   `ogImage` wins over `cover` when a post sets both: one is chosen for
+   sharing, the other for the page. The generated card is looked up on disk
+   rather than assumed, so a post whose image has not been generated yet still
+   gets a valid card instead of a 404. */
 const ogSource = data.ogImage ?? data.cover;
+const generatedCard = `/og/blog/${post.id}.png`;
+const hasGeneratedCard = existsSync(join(process.cwd(), 'public', generatedCard));
+
 const ogPreview = ogSource
   ? (await getImage({ src: ogSource, width: 1200, format: 'webp' })).src
-  : SITE.ogDefaultImage;
+  : hasGeneratedCard
+    ? generatedCard
+    : SITE.ogDefaultImage;
 ---
 
 <PageLayout title={data.title} description={data.description} image={ogPreview} ogType="article">
