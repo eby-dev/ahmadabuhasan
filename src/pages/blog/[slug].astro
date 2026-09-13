@@ -1,7 +1,11 @@
 ---
+import { getImage } from 'astro:assets';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/layout/Container.astro';
+import BlogPostingJsonLd from '@/components/seo/BlogPostingJsonLd.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import { SITE } from '@/config/site';
 import { formatFullDate, toISODate } from '@/utils/dates';
 
 export async function getStaticPaths() {
@@ -16,9 +20,25 @@ type Props = { post: CollectionEntry<'blog'> };
 const { post } = Astro.props;
 const { data } = post;
 const { Content } = await render(post);
+
+/* Posts carry no artwork of their own yet, so most fall back to the site
+   image. `ogImage` wins over `cover` when a post sets both: one is chosen for
+   sharing, the other for the page. */
+const ogSource = data.ogImage ?? data.cover;
+const ogPreview = ogSource
+  ? (await getImage({ src: ogSource, width: 1200, format: 'webp' })).src
+  : SITE.ogDefaultImage;
 ---
 
-<PageLayout title={data.title} description={data.description}>
+<PageLayout title={data.title} description={data.description} image={ogPreview} ogType="article">
+  <BlogPostingJsonLd entry={post} imageUrl={ogPreview} />
+  <BreadcrumbJsonLd
+    items={[
+      { name: 'Home', href: '/' },
+      { name: 'Blog', href: '/blog/' },
+      { name: data.title, href: `/blog/${post.id}/` },
+    ]}
+  />
   <Container narrow>
     <article>
       <header class="post-header">
