@@ -1,0 +1,57 @@
+---
+/**
+ * BlogPosting schema for a single blog post.
+ *
+ * Without this a post is just a page to Google — it carries no signal that the
+ * text is an article, when it was written, or who wrote it. With it, search
+ * results can show the date, and every post links back to the same Person node,
+ * which is how one author's posts are recognised as belonging together.
+ *
+ * `author`/`publisher` reference the Person emitted site-wide by PersonJsonLd
+ * rather than repeating it, so there is one canonical description of who that
+ * is (see PERSON_ID in src/utils/seo.ts).
+ */
+import type { CollectionEntry } from 'astro:content';
+import { SITE } from '@/config/site';
+import { PERSON_ID, absoluteUrl } from '@/utils/seo';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  imageUrl: string;
+}
+
+const { entry, imageUrl } = Astro.props;
+const { data } = entry;
+
+const canonical = absoluteUrl(`/blog/${entry.id}/`);
+const isoDate = (value: Date) => value.toISOString().slice(0, 10);
+
+const schema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${canonical}#post`,
+  headline: data.title,
+  description: data.description,
+  url: canonical,
+  image: absoluteUrl(imageUrl),
+  author: { '@id': PERSON_ID },
+  publisher: { '@id': PERSON_ID },
+  inLanguage: SITE.locale,
+  datePublished: isoDate(data.publishedAt),
+  /* Google reads mainEntityOfPage as "this schema describes this page",
+     not some other page that happens to mention it. */
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+};
+
+/* Only claim a modification date when there is one. Defaulting it to the
+   publish date would assert an edit that never happened. */
+if (data.updatedAt) {
+  schema.dateModified = isoDate(data.updatedAt);
+}
+
+if (data.tags.length > 0) {
+  schema.keywords = data.tags.join(', ');
+}
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />

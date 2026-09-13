@@ -65,6 +65,9 @@ Local server: <http://localhost:4321>.
 | `npm run lint`         | ESLint                                        |
 | `npm run format`       | Prettier write                                |
 | `npm run format:check` | Prettier check                                |
+| `npm run blog`         | List the blog queue, next post first          |
+| `npm run blog:publish` | Publish the next due post and build its card  |
+| `npm run og`           | Generate share cards for published posts      |
 
 ## Deployment
 

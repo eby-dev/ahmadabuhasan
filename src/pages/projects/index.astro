@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
 import ProjectsSection from '@/components/sections/ProjectsSection.astro';
 import ItemListJsonLd from '@/components/seo/ItemListJsonLd.astro';
+import { absoluteUrl } from '@/utils/seo';
 
 const title = 'Projects';
 const description =
@@ -20,5 +21,11 @@ entries.sort((a, b) => {
 
 <PageLayout title={title} description={description}>
   <ProjectsSection mode="all" titleLevel={1} layout="list" />
-  <ItemListJsonLd name="Projects by Ahmad Abu Hasan" entries={entries} />
+  <ItemListJsonLd
+    name="Projects by Ahmad Abu Hasan"
+    items={entries.map((entry) => ({
+      url: absoluteUrl(`/projects/${entry.id}/`),
+      name: entry.data.title,
+    }))}
+  />
 </PageLayout>

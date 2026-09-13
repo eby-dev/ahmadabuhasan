@@ -26,7 +26,13 @@ export const SITE = {
 
   /**
    * Cloudflare Web Analytics token. Empty string disables the beacon.
-   * Populate after issuing the token in the Cloudflare dashboard.
+   *
+   * Deliberately empty: analytics is enabled from the Cloudflare Pages
+   * dashboard instead, which injects the beacon while serving. Setting a
+   * token here as well would load it twice and count every visit twice.
+   *
+   * Fill this in only if the site stops being served by Cloudflare Pages,
+   * or if the dashboard setting is turned off.
    */
   analytics: {
     cloudflareToken: '',

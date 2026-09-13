@@ -1,6 +1,6 @@
 {
   "name": "ahmadabuhasan",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Personal website of Ahmad Abu Hasan — Mobile Developer.",
@@ -22,6 +22,9 @@
     "start": "astro dev",
     "build": "astro check && astro build && node scripts/prune-dist.mjs",
     "preview": "astro preview",
+    "blog": "node scripts/blog-queue.mjs",
+    "blog:publish": "node scripts/blog-queue.mjs --publish",
+    "og": "node scripts/og-images.mjs",
     "astro": "astro",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
