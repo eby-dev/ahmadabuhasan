@@ -2,7 +2,7 @@
 title: 'The Language That Only Broke in Production'
 description: 'The language switcher worked on every device I tested, and broke for everyone who installed from the Play Store. The cause was not in the code.'
 publishedAt: 2026-09-18
-draft: true
+draft: false
 tags: ['android', 'localization', 'play-store']
 ---
 
