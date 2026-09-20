@@ -12,11 +12,11 @@ export interface NavItem {
 
 export const PRIMARY_NAV = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Experience', href: '/experience' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'Skills', href: '/skills' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About', href: '/about/' },
+  { label: 'Experience', href: '/experience/' },
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Skills', href: '/skills/' },
+  { label: 'Contact', href: '/contact/' },
 ] as const satisfies readonly NavItem[];
 
 /**
@@ -26,6 +26,8 @@ export const PRIMARY_NAV = [
  */
 export function isActiveNav(pathname: string, href: string): boolean {
   if (href === '/') return pathname === '/' || pathname === '';
-  const normalized = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-  return normalized === href || normalized.startsWith(`${href}/`);
+  const strip = (s: string) => (s.endsWith('/') ? s.slice(0, -1) : s);
+  const path = strip(pathname);
+  const base = strip(href);
+  return path === base || path.startsWith(`${base}/`);
 }
