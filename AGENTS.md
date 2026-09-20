@@ -87,6 +87,16 @@ These come from Ahmad's own decisions. Do not undo them without asking.
   every deploy for months. `npm run og -- --all` renders them anyway to preview
   one; delete `public/og/blog/` and re-run bare afterwards, or the drafts' cards
   get committed.
+- **Internal links need a trailing slash.** `build.format` is `'directory'`,
+  so every page is served at `/path/`. A link to `/about` gets a 301 from
+  Cloudflare to `/about/` — the page still loads, so nothing looks broken,
+  but crawlers pay an extra hop and Ahrefs flags it. This applies to nav
+  items, `<a href>`, `Button href`, and the URLs built in `rss.xml.ts`.
+  Canonical tags and JSON-LD already build their own slashes correctly.
+- **Meta descriptions want 110-155 characters.** Below that wastes SERP
+  space; above it Google truncates. A project's `description` doubles as
+  its meta tag, its card text, and the detail-page lede, so the schema
+  caps it at 155 — editing it changes all four places at once.
 - **Analytics is enabled from the Cloudflare Pages dashboard.** `SITE.analytics
 .cloudflareToken` is empty on purpose — filling it in as well loads the beacon
   twice and counts every visit twice.
