@@ -3,9 +3,8 @@ title: ePesantren
 category: Android Native
 sector: Education
 description: >-
-  Employee-attendance Android app for Islamic boarding schools with GPS
-  check-in, selfie verification, and TrueTime server-time validation to prevent
-  device-clock manipulation.
+  Employee-attendance Android app for Islamic boarding schools. GPS check-in,
+  selfie verification, and TrueTime validation against device-clock tampering.
 cover: ../../assets/projects/epesantren.png
 contribution: Android developer
 problem: >-

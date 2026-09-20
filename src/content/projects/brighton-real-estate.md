@@ -3,9 +3,8 @@ title: Brighton Real Estate
 category: Android Native
 sector: Real Estate
 description: >-
-  Production property platform for Brighton Real Estate. I contribute to the
-  live Android app — Java → Kotlin migration, ViewBinding refactor, Android 15
-  edge-to-edge support, and RASP hardening.
+  Production property platform for Brighton Real Estate. Java → Kotlin
+  migration, ViewBinding refactor, Android 15 edge-to-edge, RASP hardening.
 longDescription: >-
   Brighton Real Estate runs a nationwide property marketplace covering listings
   across Indonesia, backed by thousands of agents in dozens of cities. The

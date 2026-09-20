@@ -3,8 +3,8 @@ title: alazhar.id
 category: Flutter
 sector: Education
 description: >-
-  Flutter payment app for Al-Azhar schools using BNI Virtual Account payments —
-  handling tuition (SPP), PPDB registration, education funds, and donations (Infaq).
+  Flutter payment app for Al-Azhar schools, built on BNI Virtual Account —
+  tuition (SPP), PPDB registration, education funds, and donations.
 cover: ../../assets/projects/alazhar-id.png
 client: Al-Azhar Schools
 contribution: Flutter developer
