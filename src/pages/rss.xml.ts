@@ -11,7 +11,7 @@ export async function GET() {
 
   const items = posts
     .map((post) => {
-      const url = new URL(`/blog/${post.id}`, SITE.url).toString();
+      const url = new URL(`/blog/${post.id}/`, SITE.url).toString();
       return `
     <item>
       <title><![CDATA[${post.data.title}]]></title>
@@ -27,7 +27,7 @@ export async function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${SITE.name} — Blog</title>
-    <link>${SITE.url}/blog</link>
+    <link>${SITE.url}/blog/</link>
     <atom:link href="${SITE.url}/rss.xml" rel="self" type="application/rss+xml" />
     <description>Notes on Android, Flutter, and mobile engineering by ${SITE.name}.</description>
     <language>${SITE.locale}</language>

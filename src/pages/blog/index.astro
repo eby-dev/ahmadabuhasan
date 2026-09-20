@@ -42,7 +42,7 @@ posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
         <ul class="list">
           {posts.map((post) => (
             <li class="item">
-              <a href={`/blog/${post.id}`} class="link">
+              <a href={`/blog/${post.id}/`} class="link">
                 <time datetime={toISODate(post.data.publishedAt)} class="date">
                   {formatFullDate(post.data.publishedAt)}
                 </time>
