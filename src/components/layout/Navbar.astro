@@ -12,7 +12,7 @@ const showBlog = publishedBlog.length > 0;
 const items: readonly NavItem[] = showBlog
   ? [
       ...PRIMARY_NAV.slice(0, -1),
-      { label: 'Blog', href: '/blog' },
+      { label: 'Blog', href: '/blog/' },
       PRIMARY_NAV[PRIMARY_NAV.length - 1]!,
     ]
   : PRIMARY_NAV;

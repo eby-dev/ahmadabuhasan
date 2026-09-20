@@ -37,7 +37,13 @@ const projects = defineCollection({
       title: z.string().min(1),
       category: z.enum(['Android Native', 'Flutter']),
       sector: z.enum(['Real Estate', 'Healthcare', 'Education', 'Government', 'Other']),
-      description: z.string().max(200),
+      /*
+       * Doubles as the page's meta description, so the ceiling is Google's
+       * SERP truncation point (~155) rather than an arbitrary limit. Ahrefs
+       * flagged four entries over it when the cap was 200; a fifth sat at
+       * 158, under Ahrefs' own threshold but still over Google's.
+       */
+      description: z.string().max(155),
       longDescription: z.string().optional(),
 
       /* Fact bar on the detail page. Each cell is dropped when its field is absent. */
