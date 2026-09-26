@@ -2,7 +2,7 @@
 title: 'How Accurate Is Accurate Enough?'
 description: 'An attendance feature has to know where you are. Picking the number that decides "close enough" took three attempts and a lesson about who owns the rule.'
 publishedAt: 2026-09-25
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'location']
 ---
 
