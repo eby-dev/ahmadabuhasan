@@ -80,3 +80,47 @@ jobs:
 
       - name: Run axe-core
         run: npm run a11y
+
+  indexnow:
+    name: IndexNow
+    runs-on: ubuntu-latest
+    needs: [build, a11y]
+    # Push to main only: a pull request has not been deployed, so announcing
+    # its URLs would point crawlers at whatever is currently live instead.
+    if: github.event_name == 'push'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # CI and Cloudflare Pages start from the same push and run independently,
+      # so the deploy is usually still in flight when the gates above go green.
+      # Pinging first would hand crawlers URLs that still serve the previous
+      # build. Poll the live key file until the deploy that carries this commit
+      # has landed, then ping.
+      - name: Wait for deploy
+        run: |
+          key=2dcc707626e9d204dc3122dbe8cb8b57
+          for i in $(seq 1 30); do
+            if curl -fsS --max-time 10 "https://ahmadabuhasan.com/$key.txt" | grep -qx "$key"; then
+              echo "Key file live after ${i} attempt(s)."
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "Key file not reachable after 10 minutes; skipping the ping." >&2
+          exit 1
+
+      - name: Ping IndexNow
+        run: npm run indexnow

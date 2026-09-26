@@ -97,6 +97,13 @@ These come from Ahmad's own decisions. Do not undo them without asking.
   space; above it Google truncates. A project's `description` doubles as
   its meta tag, its card text, and the detail-page lede, so the schema
   caps it at 155 — editing it changes all four places at once.
+- **IndexNow pings after the deploy lands, not when CI goes green.** CI and
+  Cloudflare start from the same push and run independently, so the `indexnow`
+  job polls the live key file until this commit is actually being served before
+  announcing anything. It skips pull requests entirely. The key in
+  `public/<key>.txt` is public by design — the receiving engine fetches it to
+  prove ownership — so it sits in the repo, not in a secret. Google ignores
+  IndexNow; this reaches Bing, Yandex, Seznam and Naver.
 - **Analytics is enabled from the Cloudflare Pages dashboard.** `SITE.analytics
 .cloudflareToken` is empty on purpose — filling it in as well loads the beacon
   twice and counts every visit twice.

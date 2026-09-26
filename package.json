@@ -25,6 +25,7 @@
     "blog": "node scripts/blog-queue.mjs",
     "blog:publish": "node scripts/blog-queue.mjs --publish",
     "og": "node scripts/og-images.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
     "astro": "astro",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
