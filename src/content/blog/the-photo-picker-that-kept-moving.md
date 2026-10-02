@@ -2,7 +2,7 @@
 title: 'The Photo Picker That Kept Moving'
 description: 'Letting users attach a photo took four rewrites — not because the code was wrong, but because the ground it stood on kept shifting.'
 publishedAt: 2026-10-02
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'play-store']
 ---
 
