@@ -2,7 +2,7 @@
 title: 'Half a Converter'
 description: 'Saving your profile silently wiped the fields that mattered most. The cause was a translator that only worked in one direction.'
 publishedAt: 2026-10-09
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'json']
 ---
 
