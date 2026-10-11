@@ -2,7 +2,7 @@
 title: 'The File That Was There a Minute Ago'
 description: 'A bug reporter kept failing to attach its screenshot. The file was written successfully — and gone by the time we needed it.'
 publishedAt: 2026-10-12
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'storage']
 ---
 
