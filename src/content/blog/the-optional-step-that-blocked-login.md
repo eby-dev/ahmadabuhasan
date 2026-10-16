@@ -2,7 +2,7 @@
 title: 'The Optional Step That Blocked Login'
 description: 'Signing in fetched a push notification token first. When that fetch failed, nobody could get into the app at all.'
 publishedAt: 2026-10-16
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'firebase']
 ---
 
