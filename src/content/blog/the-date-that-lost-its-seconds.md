@@ -1,7 +1,7 @@
 ---
 title: 'The Date That Lost Its Seconds'
 description: 'Same API, same field, two formats. The parser was right and the data was not, and only one of those can be fixed from the app.'
-publishedAt: 2027-07-13
+publishedAt: 2026-10-30
 draft: true
 tags: ['android', 'java', 'api-design']
 ---

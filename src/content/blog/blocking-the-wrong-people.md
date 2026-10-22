@@ -1,7 +1,7 @@
 ---
 title: 'Blocking the Wrong People'
 description: 'We turned on runtime self-protection and made it close the app on detection. Two weeks later I walked one of those checks back.'
-publishedAt: 2026-10-23
+publishedAt: 2027-08-18
 draft: true
 tags: ['android', 'security', 'kotlin']
 ---

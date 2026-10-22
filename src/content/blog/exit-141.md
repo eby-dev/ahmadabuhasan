@@ -1,7 +1,7 @@
 ---
 title: 'Exit 141'
 description: 'A build step failed at random, maybe one run in five, with nothing in common between the failures. The command worked. The pipe in front of it did not.'
-publishedAt: 2026-10-30
+publishedAt: 2027-07-13
 draft: true
 tags: ['ci-cd', 'android', 'bash']
 ---
