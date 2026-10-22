@@ -2,7 +2,7 @@
 title: 'Decrypting Fields You Did Not Ask For'
 description: 'Personal data started arriving encrypted, field by field. The cleanest place to handle it turned out to be inside the JSON parser.'
 publishedAt: 2026-10-23
-draft: true
+draft: false
 tags: ['android', 'kotlin', 'security']
 ---
 
