@@ -17,12 +17,17 @@ const appCount = projects.length;
 const sectorCount = new Set(projects.map((p) => p.data.sector)).size;
 
 const experience = await getCollection('experience');
-const firstStart = experience.reduce<Date | null>((earliest, entry) => {
-  const start = entry.data.startDate;
-  return earliest === null || start < earliest ? start : earliest;
-}, null);
-const yearsShipping = firstStart
-  ? Math.floor((Date.now() - firstStart.getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+const today = new Date();
+const experienceMs = experience.reduce((total, entry) => {
+  const end = entry.data.endDate ?? today;
+  return total + Math.max(0, end.getTime() - entry.data.startDate.getTime());
+}, 0);
+// Count time in recorded roles, excluding gaps between them and time after an end date.
+const experienceYears = experienceMs / (365.25 * 24 * 60 * 60 * 1000);
+const yearsShipping = experience.length
+  ? experienceYears >= 3.75 && experienceYears < 4
+    ? 'Nearly 4'
+    : `${Math.floor(experienceYears)}+`
   : null;
 
 /* The hero device shows the highest-ordered featured project that has a cover. */
@@ -81,7 +86,9 @@ const heroProject = projects
       {
         yearsShipping !== null && (
           <div class="proof-item">
-            <dt class="proof-value">{yearsShipping}+</dt>
+            <dt class:list={['proof-value', yearsShipping === 'Nearly 4' && 'proof-value-text']}>
+              {yearsShipping}
+            </dt>
             <dd class="proof-label">Years shipping</dd>
           </div>
         )

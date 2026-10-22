@@ -12,7 +12,7 @@ export const SITE = {
   subtitle:
     'Building production Android and Flutter apps for real estate, healthcare, and government.',
   tagline:
-    'Mobile Developer with 3+ years shipping Android and Flutter apps for real estate, healthcare, and government. Based in East Java, Indonesia.',
+    "Mobile Developer with nearly four years' experience shipping Android and Flutter apps across real estate, healthcare, and government.",
   location: {
     locality: 'Surabaya',
     region: 'East Java',
@@ -95,12 +95,6 @@ export const SITE = {
       'https://g.dev/ahmadabuhasan',
       'https://connect-with-eby.web.app',
     ],
-    worksFor: {
-      name: 'Brighton Real Estate',
-      locality: 'Surabaya',
-      region: 'East Java',
-      country: 'ID',
-    },
     alumniOf: {
       name: 'STMIK Yadika Bangil',
       locality: 'Pasuruan',

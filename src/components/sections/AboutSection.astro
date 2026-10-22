@@ -34,20 +34,31 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
     }
 
     <div class="prose">
-      <p>
-        I'm a Mobile Developer with 3+ years of experience shipping production Android (Kotlin/Java)
-        and Flutter apps. I currently work at
-        <strong>Brighton Real Estate</strong> in Surabaya, contributing to a production real estate Android
-        app in an MVP + Dagger 2 architecture.
-      </p>
+      {
+        variant === 'short' ? (
+          <p>
+            I'm a Mobile Developer with nearly four years of experience building production Android
+            and Flutter apps across real estate, healthcare, education, and government. I
+            contributed to Brighton Real Estate's Android app and was the primary developer of a
+            government attendance app featured in <em>Radar Madura</em>.
+          </p>
+        ) : (
+          <p>
+            I'm a Mobile Developer with nearly four years of experience shipping production Android
+            (Kotlin/Java) and Flutter apps. At Brighton Real Estate, I contributed to its existing
+            production Android app, focusing on the Java-to-Kotlin migration, ViewBinding refactor,
+            Android 15 edge-to-edge support, and production crash fixes.
+          </p>
+        )
+      }
 
       {
         variant === 'full' && (
           <>
             <p>
-              Previously I delivered apps across healthcare, education, and government sectors — a
-              hospital super-app, a school payment system, and a government attendance app with TF
-              Lite face recognition that was featured in <em>Radar Madura</em>.
+              Previously, I delivered mobile apps across healthcare, education, and government: a
+              hospital super-app, a school payment app, and a government attendance app with TF Lite
+              face recognition, featured in <em>Radar Madura</em>.
             </p>
             <p>
               Most of my Android work is in MVP + Dagger 2 or MVVM with Coroutines/Flow (and RxJava
@@ -59,18 +70,7 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
           </>
         )
       }
-
-      {
-        variant === 'short' && (
-          <p>
-            Previously delivered apps for healthcare, education, and government — including a
-            hospital super-app, a school payment system, and a government attendance app featured in{' '}
-            <em>Radar Madura</em>.
-          </p>
-        )
-      }
     </div>
-
     {
       variant === 'full' && (
         <div class="actions">

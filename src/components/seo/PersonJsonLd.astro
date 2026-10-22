@@ -17,16 +17,6 @@ const schema = {
     addressRegion: SITE.location.region,
     addressCountry: SITE.location.country,
   },
-  worksFor: {
-    '@type': 'Organization',
-    name: SITE.jsonLd.worksFor.name,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: SITE.jsonLd.worksFor.locality,
-      addressRegion: SITE.jsonLd.worksFor.region,
-      addressCountry: SITE.jsonLd.worksFor.country,
-    },
-  },
   alumniOf: {
     '@type': 'EducationalOrganization',
     name: SITE.jsonLd.alumniOf.name,

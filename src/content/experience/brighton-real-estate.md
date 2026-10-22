@@ -4,7 +4,7 @@ role: Android Developer
 location: Surabaya, East Java
 type: Full-time
 startDate: 2024-11-01
-endDate: null
+endDate: 2026-10-12
 stack:
   - Kotlin
   - Java
@@ -22,9 +22,9 @@ stack:
   - Fastlane
   - GitLab CI
 summary: >-
-  Contributing to the Brighton Android production app (MVP + Dagger 2)
-  already live on Play Store. Focused on incremental Java → Kotlin migration,
-  ButterKnife → ViewBinding refactor, edge-to-edge Android 15+ support, API
-  gateway endpoint migration, and production crash/NPE fixing with Crashlytics.
+  Contributed to Brighton's Android production app (MVP + Dagger 2), which was
+  already live on Play Store. Work included incremental Java → Kotlin
+  migration, ButterKnife → ViewBinding refactoring, Android 15 edge-to-edge
+  support, API gateway migration, and production crash fixes with Crashlytics.
 featured: true
 ---
