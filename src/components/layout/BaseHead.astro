@@ -41,9 +41,10 @@ const adsensePublisherId = SITE.adsense.publisherId;
      before body paint so components can style based on stored preference. -->
 <script is:inline>
   (function () {
-    var stored = localStorage.getItem('theme');
-    var theme = stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
-    var effective =
+    const stored = localStorage.getItem('theme');
+    const theme =
+      stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+    const effective =
       theme === 'system'
         ? window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
