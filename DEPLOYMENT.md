@@ -10,7 +10,7 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
 
 - Cloudflare account, `ahmadabuhasan.com` already added to your Cloudflare zone.
 - GitHub repo `eby-dev/ahmadabuhasan` up to date on `main`.
-- Node.js `>= 22.12` locally (for verification builds).
+- Node.js `>= 22.23.4` locally (for verification builds; see [`.nvmrc`](.nvmrc)).
 
 ---
 
@@ -26,7 +26,7 @@ The site is a pure static build. **No Pages Functions, no server code, no enviro
    - Build output directory: `dist`
    - Root directory: `/`
 4. **Environment variables** (Settings → Environment variables → Production):
-   - `NODE_VERSION` = `22`
+   - `NODE_VERSION` = `22.23.4`
 5. Click **Save and Deploy.** The first build should complete in ~2 minutes.
 
 ---

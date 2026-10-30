@@ -41,7 +41,7 @@ all.
 
 ## Requirements
 
-- Node.js `>= 22.12` (see [`.nvmrc`](.nvmrc))
+- Node.js `>= 22.23.4` (see [`.nvmrc`](.nvmrc))
 - npm
 
 ## Development
