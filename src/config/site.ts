@@ -12,7 +12,7 @@ export const SITE = {
   subtitle:
     'Building Android and Flutter apps across real estate, healthcare, education, and government.',
   tagline:
-    "Mobile Developer with 4 years of experience building Android and Flutter apps across real estate, healthcare, education, and government.",
+    'Mobile Developer with 4 years of experience building Android and Flutter apps across real estate, healthcare, education, and government.',
   location: {
     locality: 'Surabaya',
     region: 'East Java',
