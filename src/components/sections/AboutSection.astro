@@ -27,7 +27,7 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
         <SectionTitle
           id="about-heading"
           title="About"
-          description="Mobile Developer focused on production-grade Android and Flutter apps."
+          description="Mobile Developer building Android and Flutter applications."
           level={titleLevel}
         />
       )
@@ -37,17 +37,17 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
       {
         variant === 'short' ? (
           <p>
-            I'm a Mobile Developer with nearly four years of experience building production Android
+            I'm a Mobile Developer with 4 years of experience building Android
             and Flutter apps across real estate, healthcare, education, and government. I
             contributed to Brighton Real Estate's Android app and was the primary developer of a
             government attendance app featured in <em>Radar Madura</em>.
           </p>
         ) : (
           <p>
-            I'm a Mobile Developer with nearly four years of experience shipping production Android
-            (Kotlin/Java) and Flutter apps. At Brighton Real Estate, I contributed to its existing
-            production Android app, focusing on the Java-to-Kotlin migration, ViewBinding refactor,
-            Android 15 edge-to-edge support, and production crash fixes.
+            I'm a Mobile Developer with 4 years of experience building Android
+            (Kotlin/Java) and Flutter apps. At Brighton Real Estate, I contributed to its
+            Android app by migrating Java modules to Kotlin, replacing ButterKnife with View Binding,
+            implementing Android 15 edge-to-edge support, and fixing crashes.
           </p>
         )
       }
@@ -57,8 +57,9 @@ const { variant = 'full', showTitle = true, titleLevel = 2 } = Astro.props;
           <>
             <p>
               Previously, I delivered mobile apps across healthcare, education, and government: a
-              hospital super-app, a school payment app, and a government attendance app with TF Lite
-              face recognition, featured in <em>Radar Madura</em>.
+              hospital super-app, a school payment app, and a government attendance app featuring on-device face recognition built with
+              TensorFlow Lite.
+              The attendance app was featured in <em>Radar Madura</em>.
             </p>
             <p>
               Most of my Android work is in MVP + Dagger 2 or MVVM with Coroutines/Flow (and RxJava

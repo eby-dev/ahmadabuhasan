@@ -3,7 +3,7 @@ company: Indoweb.id
 role: Mobile Developer (Internship)
 location: Kediri, East Java
 type: Internship
-startDate: 2022-09-01
+startDate: 2022-09-03
 endDate: 2023-04-30
 stack:
   - Kotlin

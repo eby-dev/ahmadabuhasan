@@ -3,7 +3,7 @@ company: Brighton Real Estate
 role: Android Developer
 location: Surabaya, East Java
 type: Full-time
-startDate: 2024-11-01
+startDate: 2024-11-25
 endDate: 2026-10-12
 stack:
   - Kotlin

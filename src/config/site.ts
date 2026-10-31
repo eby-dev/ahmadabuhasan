@@ -10,9 +10,9 @@ export const SITE = {
   name: 'Ahmad Abu Hasan',
   role: 'Mobile Developer',
   subtitle:
-    'Building production Android and Flutter apps for real estate, healthcare, and government.',
+    'Building Android and Flutter apps across real estate, healthcare, education, and government.',
   tagline:
-    "Mobile Developer with nearly four years' experience shipping Android and Flutter apps across real estate, healthcare, and government.",
+    "Mobile Developer with 4 years of experience building Android and Flutter apps across real estate, healthcare, education, and government.",
   location: {
     locality: 'Surabaya',
     region: 'East Java',

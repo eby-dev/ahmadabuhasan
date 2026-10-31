@@ -3,8 +3,8 @@ company: CV. Natusi
 role: Programmer Mobile
 location: Mojokerto, East Java
 type: Full-time
-startDate: 2023-07-01
-endDate: 2024-10-31
+startDate: 2023-07-10
+endDate: 2024-10-09
 stack:
   - Kotlin
   - Coroutines
