@@ -1,7 +1,7 @@
 ---
 title: 'When the System API Just Stops'
 description: 'DownloadManager does not always fail. Sometimes it accepts the job, reports it as running, and never speaks again.'
-publishedAt: 2026-11-03
+publishedAt: 2027-01-25
 draft: true
 tags: ['android', 'kotlin', 'okhttp']
 ---

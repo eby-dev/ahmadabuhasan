@@ -1,8 +1,8 @@
 ---
 title: 'One Missing Field Empties the Whole Object'
 description: 'A photo was missing one URL size. The result was not a missing photo — it was a contact with no name, no office, and no ID.'
-publishedAt: 2027-01-25
-draft: true
+publishedAt: 2026-11-03
+draft: false
 tags: ['android', 'json', 'error-handling']
 ---
 
