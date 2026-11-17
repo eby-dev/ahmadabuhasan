@@ -2,7 +2,7 @@
 title: 'One Field, Twenty Screens'
 description: 'The backend added a single field to its responses. Consuming it took a week and touched twenty-odd files — and the reason was in our code, not theirs.'
 publishedAt: 2026-11-17
-draft: true
+draft: false
 tags: ['android', 'architecture', 'json']
 ---
 
